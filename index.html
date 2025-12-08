@@ -757,9 +757,17 @@
             lucide.createIcons();
             
             try {
-                const resp = await callGemini({ contents: [{ parts: [{ text: "Generate a creative, modern name for a community AI civic tech project. 3-5 words max. No quotes." }] }] });
+                const resp = await callGemini({ 
+                    contents: [{ parts: [{ text: "Generate exactly ONE creative, modern name for a community AI civic tech project. 3-5 words max. Output ONLY the name itself, nothing else. No quotes, no numbering, no explanation." }] }],
+                    generationConfig: { candidateCount: 1, maxOutputTokens: 30 }
+                });
                 const data = await resp.json();
-                if(data.candidates) titleEl.innerText = data.candidates[0].content.parts[0].text;
+                if(data.candidates) {
+                    let name = data.candidates[0].content.parts[0].text.trim();
+                    // Clean up any extra formatting
+                    name = name.replace(/^[\d\.\-\*]+\s*/, '').replace(/["']/g, '').split('\n')[0].trim();
+                    titleEl.innerText = name;
+                }
             } catch(e) { console.error("Regen failed", e); }
             
             btn.innerHTML = `<i data-lucide="refresh-cw"></i> Regenerate Identity`;
