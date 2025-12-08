@@ -56,9 +56,9 @@ const projectsData = [
         badge: "Beta",
         featured: true,
         icon: "bot-message-square",
-        title: "Commit AI Civic Agent",
-        description: "An experimental RAG chatbot that lets you ask questions against a database of civic knowledge.",
-        techStack: ["RAG", "LangChain", "GCP"],
+        title: "Commit: the Community AI Agent",
+        description: "An experimental agental AI chatbot that helps you take real-world actions in your community.",
+        techStack: ["AI Agent", "LangChain", "GCP"],
         links: { open: "https://commit-ai-civic-agent-390658405112.us-west1.run.app/" }
     },
     {
@@ -66,8 +66,8 @@ const projectsData = [
         category: "agents",
         badge: "Experimental",
         icon: "brain-circuit",
-        title: "Artificial Constituents",
-        description: "Simulating diverse community personas to test how civic proposals might impact different demographic groups.",
+        title: "Artificial: the Game of AI",
+        description: "A three-part game for learning, practicing, and critiquing AI.",
         techStack: ["AI Agents", "Simulation"],
         links: { open: "https://artificial.weirdmachine.org/" }
     }
