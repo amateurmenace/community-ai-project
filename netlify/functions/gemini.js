@@ -1,25 +1,27 @@
 // netlify/functions/gemini.js
 // Serverless function to proxy Gemini API calls (keeps API key secure)
 
-export default async (req, context) => {
+exports.handler = async (event, context) => {
+  // Set up CORS headers
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json"
+  };
+
   // Handle CORS preflight
-  if (req.method === "OPTIONS") {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-    });
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 204, headers, body: "" };
   }
 
   // Only allow POST requests
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
-      status: 405,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: "Method Not Allowed" })
+    };
   }
 
   // Get the API Key from Netlify Environment Variables
@@ -27,29 +29,27 @@ export default async (req, context) => {
 
   if (!apiKey) {
     console.error("GEMINI_API_KEY is not set in environment variables");
-    return new Response(
-      JSON.stringify({
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({
         error: "Server configuration error",
-        message: "API key not configured. Please set GEMINI_API_KEY in Netlify environment variables.",
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+        message: "API key not configured. Set GEMINI_API_KEY in Netlify environment variables."
+      })
+    };
   }
 
   try {
     // Parse the incoming body from your frontend
-    const body = await req.json();
+    const body = JSON.parse(event.body || "{}");
 
     // Call the Google Gemini API
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(geminiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     });
 
     const data = await response.json();
@@ -57,37 +57,26 @@ export default async (req, context) => {
     // Check for API errors from Gemini
     if (!response.ok) {
       console.error("Gemini API returned error:", data);
-      return new Response(
-        JSON.stringify({
-          error: "Gemini API error",
-          details: data,
-        }),
-        {
-          status: response.status,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return {
+        statusCode: response.status,
+        headers,
+        body: JSON.stringify({ error: "Gemini API error", details: data })
+      };
     }
 
     // Return the result back to your frontend
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify(data)
+    };
+
   } catch (error) {
     console.error("Function error:", error);
-    return new Response(
-      JSON.stringify({
-        error: "Internal server error",
-        message: error.message,
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: "Internal server error", message: error.message })
+    };
   }
 };
