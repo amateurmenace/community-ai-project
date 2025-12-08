@@ -325,16 +325,18 @@
                     <h2>AI as Community Infrastructure</h2>
                     <p>Digital public works that respect your privacy. Just as we build roads and libraries for the public good, we are building the digital layer of the city to be open, accessible, and owned by the people.</p>
                 </div>
-                
-                <div id="featured-spotlight" class="reveal-content"></div> 
 
-                <div style="display:flex; justify-content:center; gap:15px; margin-top:30px;" class="reveal-content">
+                <div style="display:flex; justify-content:center; gap:15px; margin-top:30px; flex-wrap:wrap;" class="reveal-content">
                     <button class="nav-btn" onclick="renderProjects('all')">All Tools</button>
                     <button class="nav-btn" onclick="renderProjects('meetings')">Meetings</button>
+                    <button class="nav-btn" onclick="renderProjects('docs')">Docs</button>
                     <button class="nav-btn" onclick="renderProjects('agents')">Agents</button>
+                    <button class="nav-btn" onclick="renderProjects('accessibility')">Accessibility</button>
                 </div>
 
                 <div class="app-grid" id="project-container"></div>
+                
+                <div id="featured-spotlight" class="reveal-content"></div>
             </div>
         </section>
 
@@ -1107,10 +1109,9 @@
                 featCont.style.display = 'none';
             }
 
-            // 2. Render Grid (Skip featured item)
+            // 2. Render Grid (show all items including featured)
             projectsData.forEach(p => {
                 if(cat !== 'all' && p.category !== cat) return;
-                if(cat === 'all' && p.featured) return; // Don't show twice
 
                 gridCont.innerHTML += `
                 <div class="card reveal-content visible">
