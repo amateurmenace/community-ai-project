@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Community AI Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <style>
+        /* --- UPDATED LIGHT IDE THEME --- */
+        :root {
+            --ide-bg-light: #f8fafc;
+            --ide-border-light: #e2e8f0;
+            --ide-text-dark: #1e293b;
+            --ide-accent-green: #059669;
+        }
+
+        .construct-panel {
+            display: none; 
+            height: 700px; 
+            background: var(--ide-bg-light); 
+            border: 4px solid var(--primary-green); 
+            margin-top: 60px;
+            grid-template-columns: 200px 1fr 1fr; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 20px 20px 0 rgba(0,0,0,0.1);
+            color: var(--ide-text-dark);
+            position: relative; 
+        }
+
+        .ide-col { 
+            border-right: 1px solid var(--ide-border-light); 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            overflow: hidden; 
+        }
+
+        .ide-header {
+            padding: 10px; 
+            background: #e2e8f0; 
+            color: #64748b; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            border-bottom: 1px solid #cbd5e1;
+            letter-spacing: 1px;
+        }
+
+        .ide-content { 
+            flex-grow: 1; 
+            padding: 20px; 
+            font-family: var(--font-mono); 
+            color: var(--ide-text-dark); 
+            overflow-y: auto; 
+            font-size: 0.95rem; 
+            line-height: 1.6;
+            height: 0; 
+        }
+
+        .ide-input-area { 
+            padding: 15px; 
+            border-top: 1px solid var(--ide-border-light); 
+            display: flex; 
+            gap: 10px; 
+            color: var(--ide-text-dark); 
+            background: #fff; 
+            flex-shrink: 0; 
+        }
+
+        .ide-input {
+            background: transparent;
+            border: none;
+            color: var(--ide-text-dark);
+            width: 100%;
+            outline: none;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        /* --- TOOLBAR STYLES --- */
+        .ide-toolbar {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tool-btn {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .tool-btn:hover { background: #e2e8f0; color: #0f172a; }
+        .tool-btn.highlight { border-color: var(--ide-accent-green); color: var(--ide-accent-green); background: #ecfdf5; }
+        .tool-btn.primary { background: var(--button-green); color: white; border: none; }
+        .tool-btn.primary:hover { background: var(--primary-green); }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast-container {
+            position: absolute; 
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            background: white;
+            border: 2px solid var(--primary-green);
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transform: translateY(150%); 
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 50; 
+        }
+        .toast-container.active { transform: translateY(0); }
+        .toast-container.done { border-color: #22c55e; background: #f0fdf4; }
+        
+        .toast-text { font-weight: 700; color: var(--primary-green); font-family: var(--font-heading); }
+        
+        .toast-spinner {
+            width: 20px; height: 20px;
+            border: 3px solid #e2e8f0;
+            border-top-color: var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .toast-check { display: none; color: #22c55e; }
+        .toast-container.done .toast-spinner { display: none; }
+        .toast-container.done .toast-check { display: block; animation: pop 0.3s ease; }
+        
+        @keyframes pop { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        /* Thinking Flash */
+        .thinking-text {
+            color: #94a3b8;
+            font-style: italic;
+            font-size: 0.85rem;
+            animation: pulse 1.5s infinite;
+            margin-bottom: 10px;
+        }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+        /* --- IMAGE GENERATION MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 100000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background: white; width: 90%; max-width: 500px;
+            padding: 30px; border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            text-align: center;
+            transform: translateY(20px); transition: transform 0.3s;
+        }
+        .modal-overlay.open .modal-box { transform: translateY(0); }
+        .modal-input {
+            width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 6px;
+            margin: 20px 0; font-family: inherit; font-size: 1rem;
+        }
+        .img-preview-area {
+            min-height: 200px; background: #f8fafc; border: 2px dashed #cbd5e1;
+            border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative;
+        }
+        .modal-actions { display: flex; gap: 10px; justify-content: center; display: none; }
+        .modal-actions.active { display: flex; }
+
+        /* --- FEATURED APP STYLES --- */
+        .featured-wrapper {
+            background: #111827;
+            border-radius: 12px;
+            border: 3px solid var(--primary-green);
+            margin-top: 40px;
+            margin-bottom: 60px;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            overflow: hidden;
+            box-shadow: 15px 15px 0px rgba(5, 46, 22, 0.15);
+            min-height: 600px;
+        }
+        
+        .featured-app-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            border-right: 2px solid var(--primary-green);
+        }
+
+        .featured-header-bar {
+            background: #052e16;
+            color: #4ade80;
+            padding: 10px 15px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--primary-green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .iframe-wrapper {
+            position: relative;
+            flex-grow: 1;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .featured-app-frame {
+            width: 100%; height: 100%; border: none; background: white;
+        }
+
+        .featured-info {
+            padding: 40px; display: flex; flex-direction: column;
+            justify-content: center; color: #e5e7eb;
+        }
+        .featured-label {
+            color: #4ade80; font-family: var(--font-mono); font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .featured-tech-tag {
+            display: inline-block; background: rgba(255,255,255,0.1);
+            padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;
+            margin-right: 5px; font-family: var(--font-mono); color: #34d399;
+        }
+
+        /* BOUNCING ARROW */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(5, 46, 22, 0.9);
+            color: #4ade80;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none; /* Allows clicks to pass through */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            animation: bounce 2s infinite;
+            z-index: 20;
+            border: 1px solid #4ade80;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+            40% {transform: translateX(-50%) translateY(-10px);}
+            60% {transform: translateX(-50%) translateY(-5px);}
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        @media (max-width: 900px) {
+            .featured-wrapper { grid-template-columns: 1fr; }
+            .featured-app-container { height: 500px; border-right: none; border-bottom: 2px solid var(--primary-green); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="kitchen-timer-sound" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAADAAALMACKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKAAAA8TEAMEhvbWUAAAaQAAAAIwAAAAAAAAAAAAAA//uQxAAACmABQAAAAAAoAFAAAAAAABJAAAAAAAAAAJAAAAAAAAAAAAAAD/7kMQAAAMAFAAAAAAAwAUAAAAAAAekAAAAAAAAACQAAAAAAAAAAAAAA//uQxAAAAAAFAAAAAAAAAFAAAAAAAAJAAAAAAAAAAAkAAAAAAAAAAAAAAP/7kMQAAACABQAAAAAAIAFAAAAAAAH0gAAAAAAAAAJAAAAAAAAAAAAAAA//uQxAAAAUAFAAAAAAABQAUP/7kMQAAABQB8AAIAAACgD4AAIAAACQAAAAAAAAAAkAAAAAAAAAAAAAAP/7kMQAAABQB8AAIAAACgD4AAIAAACQAAAAAAAAAAkAAAAAAAAAAAAAAP/7kMQAAABQB8AAIAAACgD4AAIAAACQAAAAAAAAAAkAAAAAAAAAAAAAAP/7kMQAAABQB8AAIAAACgD4AAIAAACQAAAAAAAAAAkAAAAAAAAAAAAAAA=="></audio>
+
+    <div id="main-content">
+        
+        <header class="hero">
+            <div class="hero-overlay"></div>
+            <div class="container">
+                <h1 class="main-title reveal-content" id="site-title">The Community AI Project</h1>
+                <div class="dynamic-subhead reveal-content">
+                    Building AI for <span id="typewriter-text"></span><span style="display:inline-block; width:12px; height:4px; background:var(--button-green);"></span>
+                </div>
+                
+                <div style="display:flex; justify-content:center; width:100%;">
+                    <button class="regen-btn" id="regen-btn" onclick="regenerateIdentity()">
+                        <i data-lucide="refresh-cw" width="14"></i> Regenerate Identity
+                    </button>
+                </div>
+                
+                <p class="hero-explainer reveal-content">
+                    We are a decentralized coalition of neighbors, coders, and civic leaders. Our project builds open-source digital infrastructure that allows local communities to govern their own data, use AI for public good, and reclaim the future of their cities from big tech monopolies.
+                </p>
+
+                <div class="hero-nav reveal-content">
+                    <a href="#apps" class="nav-btn">Browse Tools</a>
+                    <a href="#values" class="nav-btn">Our Values</a>
+                    <a href="#mission" class="nav-btn">Mission Control</a>
+                    <a href="#ai-playground" class="nav-btn special">
+                        <i data-lucide="bot" width="18"></i> Playground
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <section class="section infra-section" id="apps">
+            <svg class="civic-doodle d-1" viewBox="0 0 24 24"><path d="M12 2v20M6 12h12M6 12l-2-2M18 12l2-2" /></svg>
+            <svg class="civic-doodle d-2" viewBox="0 0 24 24"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/></svg>
+            <svg class="civic-doodle d-3" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" /><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+            <svg class="civic-doodle d-4" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+
+            <div class="container">
+                <div class="text-center reveal-content">
+                    <h2>AI as Community Infrastructure</h2>
+                    <p>Digital public works that respect your privacy. Just as we build roads and libraries for the public good, we are building the digital layer of the city to be open, accessible, and owned by the people.</p>
+                </div>
+                
+                <div id="featured-spotlight" class="reveal-content"></div> 
+
+                <div style="display:flex; justify-content:center; gap:15px; margin-top:30px;" class="reveal-content">
+                    <button class="nav-btn" onclick="renderProjects('all')">All Tools</button>
+                    <button class="nav-btn" onclick="renderProjects('meetings')">Meetings</button>
+                    <button class="nav-btn" onclick="renderProjects('agents')">Agents</button>
+                </div>
+
+                <div class="app-grid" id="project-container"></div>
+            </div>
+        </section>
+
+        <section class="section values-section" id="values">
+            <div class="container reveal-content">
+                <div class="values-grid-modern">
+                    <div class="values-list">
+                        <h2 style="margin-bottom:20px;">Our Values are Coded&nbsp;In.</h2>
+                        <p style="margin-bottom:40px;">Principles that guide every line of code we write.</p>
+                        
+                        <div class="value-item-mod">
+                            <div class="v-icon"><i data-lucide="lock" color="#052e16"></i></div>
+                            <div class="v-content">
+                                <h4>Local-First Privacy</h4>
+                                <p>Data stays in the community. Tools run on local devices, not distant corporate clouds.</p>
+                            </div>
+                        </div>
+                        <div class="value-item-mod">
+                            <div class="v-icon"><i data-lucide="git-branch" color="#052e16"></i></div>
+                            <div class="v-content">
+                                <h4>Radical Openness</h4>
+                                <p>No black boxes. Anyone can audit our code. Trust is earned through transparency.</p>
+                            </div>
+                        </div>
+                        <div class="value-item-mod">
+                            <div class="v-icon"><i data-lucide="users" color="#052e16"></i></div>
+                            <div class="v-content">
+                                <h4>Human Centric</h4>
+                                <p>AI should serve to amplify human connection and civic action, not replace it.</p>
+                            </div>
+                        </div>
+                        <div class="value-item-mod">
+                            <div class="v-icon"><i data-lucide="home" color="#052e16"></i></div>
+                            <div class="v-content">
+                                <h4>Community Owned</h4>
+                                <p>We believe neighborhoods should own their digital data just as they own their physical spaces.</p>
+                            </div>
+                        </div>
+                        <div class="value-item-mod">
+                            <div class="v-icon"><i data-lucide="accessibility" color="#052e16"></i></div>
+                            <div class="v-content">
+                                <h4>Accessible by Default</h4>
+                                <p>We design for disabilities and language barriers first, ensuring no neighbor is left behind.</p>
+                            </div>
+                        </div>
+                        <div class="value-item-mod">
+                            <div class="v-icon"><i data-lucide="leaf" color="#052e16"></i></div>
+                            <div class="v-content">
+                                <h4>Sustainable Tech</h4>
+                                <p>We build lightweight, resilient tools that run on old hardware and don't require expensive upgrades.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="code-block-modern">
+                            <div><span style="color:#a855f7">const</span> civicStack = {</div>
+                            <div style="padding-left:20px;">owner: <span style="color:#d946ef">"The Public"</span>,</div>
+                            <div style="padding-left:20px;">model: <span style="color:#d946ef">"Open Source"</span>,</div>
+                            <div style="padding-left:20px;">profit: <span style="color:#3b82f6">false</span>,</div>
+                            <div style="padding-left:20px;">location: <span style="color:#d946ef">"Brookline, MA"</span>,</div>
+                            <div style="padding-left:20px;">data: <span style="color:#a855f7">function</span>() {</div>
+                            <div style="padding-left:40px; color:#9ca3af;">// Data never leaves device</div>
+                            <div style="padding-left:40px;"><span style="color:#a855f7">return</span> local.storage;</div>
+                            <div style="padding-left:20px;">}</div>
+                            <div>}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="intersection-section">
+            <div class="traffic-container">
+                <div class="road-h"></div>
+                <div class="road-v"></div>
+                <div class="car c1"></div>
+                <div class="car c2"></div>
+                <div class="car c3"></div>
+            </div>
+            
+            <div class="container reveal-content">
+                <div class="intersection-content text-center">
+                    <h2>Code Meets Concrete</h2>
+                    <p style="margin: 0 auto; font-size:1.2rem;">
+                        We apply the speed of modern software development to slow-moving civic problems. By deploying micro-apps for specific neighborhood needs, we can iterate faster than bureaucracy allows, while maintaining the safety and inclusivity required for public life.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section mission-section" id="mission">
+            <div class="container reveal-content">
+                <h2 class="text-center">Mission Control</h2>
+                
+                <div class="mission-chat-wrapper">
+                    <div class="chat-window" id="mission-chat-box">
+                        </div>
+                </div>
+
+                <div class="mission-grid">
+                    <div class="m-card">
+                        <div class="m-title"><i data-lucide="help-circle"></i> Why AI?</div>
+                        <p class="m-text">Corporate AI extracts value; Community AI creates value. We analyze public data at the scale of a government to empower the individual.</p>
+                    </div>
+                    <div class="m-card">
+                        <div class="m-title"><i data-lucide="terminal"></i> Our Means</div>
+                        <p class="m-text">We build with Open Source models that can be audited by anyone. We prioritize Local-First deployment. Low cost, high privacy.</p>
+                    </div>
+                    <div class="m-card">
+                        <div class="m-title"><i data-lucide="flag"></i> Our Ends</div>
+                        <p class="m-text">Our goal isn't just "smarter" cities, but <strong>stronger citizens</strong>. Reducing tedious admin so volunteers can focus on action.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section builders-section">
+            <div class="sketch-overlay"></div>
+            <div class="container reveal-content">
+                <h2 class="text-center">The Builders Network</h2>
+                <p class="text-center" style="margin-bottom:50px;">A collaboration between public media makers and creative technologists.</p>
+                <div class="builders-grid">
+                    <div class="b-card">
+                        <i data-lucide="code" size="48" style="color:var(--primary-green); margin-bottom:20px;"></i>
+                        <span class="b-role">Architecture</span>
+                        <h3>Stephen Walter</h3>
+                        <p>Creative Technologist at Weird Machine.</p>
+                    </div>
+                    <div class="b-card">
+                        <i data-lucide="radio" size="48" style="color:var(--primary-green); margin-bottom:20px;"></i>
+                        <span class="b-role">Community Lead</span>
+                        <h3>Brookline Interactive</h3>
+                        <p>Public access media & civic hub.</p>
+                    </div>
+                    <div class="b-card">
+                        <i data-lucide="database" size="48" style="color:var(--primary-green); margin-bottom:20px;"></i>
+                        <span class="b-role">Data Strategy</span>
+                        <h3>Neighborhood.AI</h3>
+                        <p>Local data models & training.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section playground-section" id="ai-playground">
+            <div class="container reveal-content">
+                <div class="text-center" style="margin-bottom:40px;">
+                    <h2>AI Playground</h2>
+                    <p>Deconstruct this site or build something new.</p>
+                </div>
+                
+                <div class="cli-wrapper">
+                    <div class="cli-box">
+                        <span>> community_vibe_coder.exe</span>
+                        <button class="cli-btn" onclick="showPaths()">INITIALIZE</button>
+                    </div>
+                    
+                    <div class="fork-container" id="fork-container">
+                        <svg class="fork-svg">
+                             <path class="fork-path" d="M 400 0 C 400 30, 200 30, 200 100" />
+                             <path class="fork-path" d="M 400 0 C 400 30, 600 30, 600 100" />
+                        </svg>
+                        <div class="fork-buttons">
+                            <button class="fork-btn" onclick="openDeconstruct()"><i data-lucide="wrench"></i> Deconstruct</button>
+                            <button class="fork-btn" onclick="openConstruct()"><i data-lucide="hammer"></i> Construct</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="deconstruct-panel" class="deconstruct-panel">
+                    <h3>Visual Editor</h3>
+                    <div class="preset-row">
+                        <button class="preset-btn" onclick="applyPreset('plain')">Plain HTML</button>
+                        <button class="preset-btn" onclick="applyPreset('bit')">8-Bit Game</button>
+                        <button class="preset-btn" onclick="applyPreset('kids')">Kids Mode</button>
+                        <button class="preset-btn" onclick="applyPreset('cyber')">Cyberpunk</button>
+                        <button class="preset-btn" onclick="applyPreset('normal')">Return to Normal</button>
+                    </div>
+                    <div class="sliders-grid">
+                         <div class="slider-row"><span>Hue</span> <input type="range" min="0" max="360" oninput="updateVar('--site-hue', this.value+'deg')"></div>
+                         <div class="slider-row"><span>Sat</span> <input type="range" min="0" max="3" step="0.1" value="1" oninput="updateVar('--site-sat', this.value)"></div>
+                         <div class="slider-row"><span>Scale</span> <input type="range" min="0.5" max="1.5" step="0.1" value="1" oninput="updateVar('--site-scale', this.value)"></div>
+                         <div class="slider-row"><span>Font Size</span> <input type="range" min="12" max="24" value="18" oninput="updateVar('--base-font-size', this.value+'px')"></div>
+                         <div class="slider-row"><span>Spacing</span> <input type="range" min="-2" max="10" value="0" oninput="updateVar('--letter-spacing', this.value+'px')"></div>
+                         <div class="slider-row"><span>Radius</span> <input type="range" min="0" max="50" value="8" oninput="updateVar('--border-radius', this.value+'px')"></div>
+                         <div class="slider-row"><span>Blur</span> <input type="range" min="0" max="10" value="0" oninput="updateVar('--site-blur', this.value+'px')"></div>
+                         <div class="slider-row"><span>Border</span> <input type="range" min="0" max="10" value="1" oninput="updateVar('--border-width', this.value+'px')"></div>
+                    </div>
+                </div>
+
+                <div id="construct-panel" class="construct-panel">
+                    <div class="ide-col">
+                        <div class="ide-header">FILES</div>
+                        <div style="padding:10px; color:#64748b;">index.html</div>
+                        <div class="ide-toolbar" style="flex-direction: column;">
+                             <button class="tool-btn highlight" onclick="openImageModal()">
+                                <i data-lucide="image"></i> Generate Image
+                             </button>
+                             <button id="save-btn" class="tool-btn primary" onclick="emailMaster()" style="display:none;">
+                                <i data-lucide="mail"></i> Save to Site
+                             </button>
+                             <button id="export-btn" class="tool-btn" onclick="exportZip()" style="display:none;">
+                                <i data-lucide="folder-down"></i> Export Code
+                             </button>
+                        </div>
+                    </div>
+                    <div class="ide-col">
+                        <div class="ide-header">CHAT / CODE</div>
+                        <div id="code-display" class="ide-content"></div>
+                        <div class="ide-input-area">
+                            <div style="display:flex; flex-direction:column; width:100%; gap:8px;">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span>>></span>
+                                    <input id="user-input" class="ide-input" placeholder="Describe app..." onkeypress="handleInput(event)">
+                                    <button class="tool-btn" onclick="submitChat()">
+                                        <i data-lucide="arrow-up" width="14"></i>
+                                    </button>
+                                </div>
+                                <button class="tool-btn" style="width:fit-content" onclick="inspireMe()">
+                                    <i data-lucide="sparkles" width="12"></i> Inspire Me
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ide-col">
+                        <div class="ide-header">PREVIEW</div>
+                        <iframe id="app-preview" style="width:100%; height:100%; border:none; background:white;"></iframe>
+                    </div>
+                    
+                    <div id="toast-notification" class="toast-container">
+                        <div class="toast-spinner"></div>
+                        <i data-lucide="check" class="toast-check" width="20"></i>
+                        <span id="toast-msg" class="toast-text">Cooking...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="image-modal" class="modal-overlay">
+            <div class="modal-box">
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                    <h3>Nano Banana Asset Gen</h3>
+                    <button onclick="closeImageModal()" style="background:none; border:none; cursor:pointer;">X</button>
+                </div>
+                
+                <input id="img-prompt" class="modal-input" placeholder="Describe asset (e.g. 'A pixel art tree')..." />
+                
+                <div class="img-preview-area" id="img-preview-area">
+                    <span style="color:#cbd5e1;">Preview Area</span>
+                </div>
+                
+                <button id="btn-run-img" class="nav-btn" style="width:100%; justify-content:center;" onclick="runImageGen()">Generate SVG</button>
+                
+                <div id="modal-actions" class="modal-actions">
+                    <button class="tool-btn" onclick="downloadSVG()">Download SVG</button>
+                    <button class="tool-btn primary" onclick="useImageInApp()">Use in App</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="modern-footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="get-involved-box">
+                        <h3 style="margin-bottom:15px; color:#0f172a;">Get Involved</h3>
+                        <p style="opacity:0.8; margin-bottom:20px; color:#334155;">Developers, organizers, leaders: Help us deploy these tools.</p>
+                        <a href="/cdn-cgi/l/email-protection#9bf8f4f5effaf8efdbf9e9f4f4f0f7f2f5fef2f5effee9faf8eff2edfeb5f4e9fc" class="btn-footer-contact">
+                            <i data-lucide="mail" width="18"></i> Contact Team
+                        </a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Project</h4>
+                        <a href="#apps">Tools</a>
+                        <a href="#values">Values</a>
+                        <a href="#mission">Mission Control</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <a href="#">GitHub</a>
+                        <a href="#">Documentation</a>
+                        <a href="#">Guidelines</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Partners</h4>
+                        <a href="#">Brookline Interactive</a>
+                        <a href="#">Weird Machine</a>
+                        <a href="#">Neighborhood.AI</a>
+                    </div>
+                </div>
+                <div class="footer-bottom" style="flex-direction: column; gap: 20px; text-align: center; border-top:1px solid #cbd5e1; padding-top:40px;">
+                    <div style="font-size: 0.9rem; color: #64748b;">
+                        A community AI app from <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Brookline Interactive Group</a> in partnership with <a href="https://neighborhoodai.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Neighborhood AI</a>.
+                    </div>
+                    <div style="font-size: 0.9rem; color: #64748b;">
+                        Designed and developed by <a href="https://weirdmachine.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Stephen Walter</a> + AI.
+                    </div>
+                    <div style="display:flex; justify-content:center; gap:15px; align-items:center; margin-top:10px;">
+                        <a href="https://github.com/amateurmenace/community-ai" target="_blank" aria-label="GitHub">
+                            <i data-lucide="github" width="20" style="color:var(--primary-green);"></i>
+                        </a>
+                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" aria-label="Creative Commons BY-SA" style="display:flex; align-items:center; gap:5px; color:#64748b; text-decoration:none; font-size:0.8rem;">
+                            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height:1.2em;">
+                            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height:1.2em;">
+                            <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" style="height:1.2em;">
+                        </a>
+                    </div>
+                    <div id="google_translate_element" style="margin-top:15px;"></div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        window.CONFIG = {}; 
+    </script>
+    <script src="config.js" onerror="console.log('No local config found. Using Netlify Proxy.')"></script>
+    <script src="projects.js"></script>
+    <script>function googleTranslateElementInit() { new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element'); }</script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        // --- HYBRID API CALLER ---
+        async function callGemini(payload) {
+            // DETECT LOCALHOST
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+
+            // Model to use (use a stable model name)
+            const MODEL = 'gemini-2.0-flash';
+
+            // 1. Local Dev Mode (Prioritize local config)
+            if (window.CONFIG && window.CONFIG.API_KEY) {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${window.CONFIG.API_KEY}`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    console.error('Gemini API error:', errData);
+                    throw new Error(errData.error?.message || 'API request failed');
+                }
+                return response;
+            } 
+            // 2. Netlify Prod Mode (or missing local config)
+            else {
+                if (isLocal) {
+                    appendCode('AI', 'Error: Running locally but config.js not found. Create config.js with: window.CONFIG = { API_KEY: "your-key" }');
+                    throw new Error("Missing Local Config");
+                }
+                const response = await fetch('/.netlify/functions/gemini', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    console.error('Netlify function error:', errData);
+                    throw new Error(errData.message || 'Function request failed');
+                }
+                return response;
+            }
+        }
+
+        // --- MISSION CONTROL ANIMATION ---
+        async function animateMissionChat() {
+            const container = document.getElementById('mission-chat-box');
+            container.innerHTML = ''; // Clear
+
+            const sequence = [
+                { type: 'user', text: "What zoning changes are proposed for precinct 4?" },
+                { type: 'ai', text: "Scanning municipal PDF agendas... \n\nThe Select Board is proposing a new overlay district for precinct 4 allowing mixed-use development. Public comment is open until Tuesday." },
+                { type: 'user', text: "Draft a 2 minute comment supporting this." }
+            ];
+
+            for (let item of sequence) {
+                const bubble = document.createElement('div');
+                bubble.className = `chat-bubble ${item.type}-msg`;
+                bubble.style.opacity = '0'; 
+                container.appendChild(bubble);
+                
+                // Fade in
+                setTimeout(() => bubble.style.opacity = '1', 50);
+                
+                // Typewriter
+                for (let i = 0; i < item.text.length; i++) {
+                    bubble.innerHTML += item.text.charAt(i) === '\n' ? '<br>' : item.text.charAt(i);
+                    await new Promise(r => setTimeout(r, 15));
+                }
+                await new Promise(r => setTimeout(r, 1000)); // Pause between turns
+            }
+        }
+
+        // --- PLAYGROUND ---
+        function showPaths() { document.getElementById('fork-container').classList.add('active'); }
+        function openDeconstruct() { document.getElementById('deconstruct-panel').style.display = 'block'; document.getElementById('construct-panel').style.display = 'none'; }
+        
+        function openConstruct() { 
+            document.getElementById('construct-panel').style.display = 'grid'; 
+            document.getElementById('deconstruct-panel').style.display = 'none';
+            appendCode('AI', '<em>"True freedom is not just escaping oppression - it is building a world without it."</em>', false);
+            appendCode('AI', 'Let\'s build something together. Start by telling me about a community problem you\'d like to solve.', true);
+        }
+
+        function updateVar(name, val) { document.documentElement.style.setProperty(name, val); }
+        function applyPreset(type) {
+            document.body.className = "";
+            if(type === 'plain') document.body.classList.add('plain-html');
+            if(type === 'bit') document.body.classList.add('bit-mode');
+            if(type === 'kids') document.body.classList.add('kids-mode');
+            if(type === 'cyber') document.body.classList.add('cyber-mode');
+        }
+
+        async function regenerateIdentity() {
+            const btn = document.getElementById('regen-btn');
+            const titleEl = document.getElementById('site-title');
+            btn.innerHTML = `<i data-lucide="loader" class="spin"></i> Generating...`;
+            lucide.createIcons();
+            
+            try {
+                const resp = await callGemini({ contents: [{ parts: [{ text: "Generate a creative, modern name for a community AI civic tech project. 3-5 words max. No quotes." }] }] });
+                const data = await resp.json();
+                if(data.candidates) titleEl.innerText = data.candidates[0].content.parts[0].text;
+            } catch(e) { console.error("Regen failed", e); }
+            
+            btn.innerHTML = `<i data-lucide="refresh-cw"></i> Regenerate Identity`;
+            lucide.createIcons();
+        }
+
+        // --- GEMINI VIBE CODER LOGIC ---
+        let chatHistory = [];
+        let isAppBuilt = false;
+        let lastBuildSummary = "";
+
+        const SYSTEM_INSTRUCTION = `You are Vibe Coder, a civic-minded creative technologist. 
+        GOAL: Help the user build a creative, clever, and non-traditional web tool for their community.
+        CRITICAL: Keep your responses SHORT and CONCISE (max 2 sentences). Include line breaks (newlines) between ideas to make text readable.
+        PHASE 1 (Discovery): When the user proposes an idea, ask 3-4 distinct clarifying questions (one by one) to refine the target audience, data needs, and "vibe" (visual style). Suggest using AI where relevant.
+        PHASE 2 (Build): Once you have enough info, output the token [BUILD] followed by a detailed summary of the requirements. The app design should be modern, possibly brutalist or playful, and not boring corporate style.
+        PHASE 3 (Refine): If the user asks for changes AFTER the build, output [BUILD] again with the updated full summary including the new changes.`;
+
+        function handleInput(e) {
+            if(e.key === 'Enter') submitChat();
+        }
+        
+        function submitChat() {
+            const input = document.getElementById('user-input');
+            const val = input.value;
+            if(!val) return;
+            appendCode('USER', val);
+            chatHistory.push({ role: "user", parts: [{ text: val }] });
+            input.value = '';
+            processVibeCoder();
+        }
+
+        // --- TYPEWRITER & CHAT UI ---
+        async function appendCode(who, text, animated = false) {
+            const div = document.getElementById('code-display');
+            const msgWrapper = document.createElement('div');
+            msgWrapper.style.marginBottom = "15px";
+            msgWrapper.style.whiteSpace = "pre-wrap"; 
+            msgWrapper.style.color = who === 'AI' ? '#059669' : '#1e293b';
+            msgWrapper.innerHTML = `<strong>${who}:</strong> `;
+            const textSpan = document.createElement('span');
+            msgWrapper.appendChild(textSpan);
+            div.appendChild(msgWrapper);
+
+            if (animated) {
+                for (let i = 0; i < text.length; i++) {
+                    textSpan.innerHTML += text.charAt(i);
+                    div.scrollTop = div.scrollHeight;
+                    await new Promise(r => setTimeout(r, 10));
+                }
+            } else { textSpan.innerHTML = text; }
+            div.scrollTop = div.scrollHeight;
+        }
+
+        // --- THINKING INDICATOR ---
+        let thinkingInterval;
+        function startThinking() {
+            const div = document.getElementById('code-display');
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.id = "thinking-indicator";
+            thinkingDiv.className = "thinking-text";
+            thinkingDiv.innerText = "Thinking...";
+            div.appendChild(thinkingDiv);
+            div.scrollTop = div.scrollHeight;
+
+            const phrases = ["Thinking...", "Cooking up ideas...", "Consulting the civic manual...", "Wiring neurons...", "Analyzing vibe..."];
+            let i = 0;
+            thinkingInterval = setInterval(() => {
+                i = (i + 1) % phrases.length;
+                if(document.getElementById('thinking-indicator')) {
+                    document.getElementById('thinking-indicator').innerText = phrases[i];
+                }
+            }, 1500);
+        }
+
+        function stopThinking() {
+            clearInterval(thinkingInterval);
+            const el = document.getElementById('thinking-indicator');
+            if(el) el.remove();
+        }
+
+        async function inspireMe() {
+            const input = document.getElementById('user-input');
+            input.value = "Generating idea...";
+            try {
+                const resp = await callGemini({ contents: [{ parts: [{ text: "Give me a short, 1-sentence idea for a creative, slightly weird, but useful community app." }] }] });
+                const data = await resp.json();
+                input.value = data.candidates[0].content.parts[0].text.replace(/"/g, "");
+                input.focus();
+            } catch(e) { input.value = "A hyper-local social network for street cats."; }
+        }
+
+        // --- MODAL & IMAGE GEN ---
+        let lastGeneratedSVG = "";
+
+        function openImageModal() {
+            document.getElementById('image-modal').classList.add('open');
+            document.getElementById('img-prompt').focus();
+        }
+        function closeImageModal() {
+            document.getElementById('image-modal').classList.remove('open');
+        }
+
+        async function runImageGen() {
+            const promptStr = document.getElementById('img-prompt').value;
+            if(!promptStr) return;
+            
+            const preview = document.getElementById('img-preview-area');
+            const btn = document.getElementById('btn-run-img');
+            const actions = document.getElementById('modal-actions');
+            
+            btn.innerText = "Generating...";
+            btn.disabled = true;
+            preview.innerHTML = `<div class="toast-spinner" style="border-color:#ccc; border-top-color:#059669; width:40px; height:40px;"></div>`;
+            
+            try {
+                 const resp = await callGemini({ contents: [{ parts: [{ text: `Generate an SVG code string for: ${promptStr}. Return ONLY the <svg> code. Make it colorful. Do not use Markdown.` }] }] });
+                const data = await resp.json();
+                let svg = data.candidates[0].content.parts[0].text;
+                svg = svg.replace(/```svg/g, "").replace(/```html/g, "").replace(/```/g, "");
+                
+                lastGeneratedSVG = svg;
+                preview.innerHTML = svg;
+                btn.innerText = "Generate Another";
+                btn.disabled = false;
+                actions.classList.add('active');
+
+            } catch(e) { 
+                preview.innerHTML = "<span style='color:red'>Generation failed.</span>";
+                btn.innerText = "Try Again";
+                btn.disabled = false;
+            }
+        }
+
+        function downloadSVG() {
+            if(!lastGeneratedSVG) return;
+            const blob = new Blob([lastGeneratedSVG], {type: 'image/svg+xml'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "nano-banana-asset.svg";
+            a.click();
+        }
+
+        function useImageInApp() {
+            if(!lastGeneratedSVG) return;
+            closeImageModal();
+            chatHistory.push({ role: "user", parts: [{ text: `I have generated this SVG asset. Please incorporate it into the app design:\n${lastGeneratedSVG}` }] });
+            appendCode('USER', `[Asset Injected] Please use the generated image in the app.`);
+            processVibeCoder();
+        }
+
+        async function processVibeCoder() {
+            startThinking();
+
+            let currentInstructions = SYSTEM_INSTRUCTION;
+            if(isAppBuilt) {
+                currentInstructions += ` The app is currently built based on this summary: "${lastBuildSummary}". The user wants to modify it. Output [BUILD] with the full updated summary.`;
+            }
+
+            try {
+                const resp = await callGemini({
+                    contents: chatHistory,
+                    systemInstruction: { parts: [{ text: currentInstructions }] }
+                });
+                const data = await resp.json();
+                const aiText = data.candidates[0].content.parts[0].text;
+                
+                stopThinking();
+                chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+
+                if(aiText.includes("[BUILD]")) {
+                    isAppBuilt = true;
+                    const summary = aiText.split("[BUILD]")[1];
+                    lastBuildSummary = summary;
+                    
+                    appendCode('AI', 'Estimated build time: 1-2 minutes. Stay tuned!', true);
+                    
+                    const toast = document.getElementById('toast-notification');
+                    toast.classList.add('active');
+                    toast.classList.remove('done');
+                    document.getElementById('toast-msg').innerText = "Cooking App...";
+                    lucide.createIcons();
+
+                    simulateBuildLogs(); 
+                    buildApp(summary); 
+                } else {
+                    appendCode('AI', aiText, true); 
+                }
+
+            } catch(e) { stopThinking(); console.error(e); appendCode('AI', 'Connection failed.'); }
+        }
+
+        let buildInterval;
+        function simulateBuildLogs() {
+            const logs = [
+                ">> Initializing environment...", 
+                ">> Importing civic data libraries...",
+                ">> Configuring TailwindCSS...", 
+                ">> Generating creative layout...",
+                ">> Writing main function...",
+                ">> Optimizing accessibility...",
+                ">> Compiling assets..."
+            ];
+            let i = 0;
+            const div = document.getElementById('app-preview').contentWindow.document;
+            div.open();
+            div.write(`<style>body{background:#fff;color:#333;font-family:monospace;padding:20px;}</style>`);
+            
+            buildInterval = setInterval(() => {
+                if(i < logs.length) {
+                    div.write(`<div>${logs[i]}</div>`);
+                    i++;
+                }
+            }, 800);
+        }
+
+        async function buildApp(requirements) {
+            const buildPrompt = `Create a complete, single-file HTML/JS/CSS application based on this summary: ${requirements}. 
+            Constraints: 
+            1. Use TailwindCSS via CDN. 
+            2. Design must be CREATIVE. 
+            3. Return ONLY raw HTML code starting with <!DOCTYPE html>.
+            4. Do not wrap in markdown.`;
+            
+            try {
+                const resp = await callGemini({ contents: [{ role: "user", parts: [{ text: buildPrompt }] }] });
+                const data = await resp.json();
+                let code = data.candidates[0].content.parts[0].text;
+                code = code.replace(/```html/g, "").replace(/```/g, "");
+                
+                clearInterval(buildInterval); 
+                document.getElementById('app-preview').srcdoc = code;
+                appendCode('AI', 'App construction complete. You can now refine it or download it.', true);
+                
+                document.getElementById('export-btn').style.display = 'flex';
+                document.getElementById('save-btn').style.display = 'flex';
+                
+                const toast = document.getElementById('toast-notification');
+                toast.classList.add('done');
+                document.getElementById('toast-msg').innerText = "App Cooked!";
+                lucide.createIcons();
+                
+                document.getElementById('kitchen-timer-sound').play().catch(e => console.log("Audio blocked"));
+
+            } catch(e) { console.error(e); }
+        }
+
+        function exportZip() {
+            const code = document.getElementById('app-preview').srcdoc;
+            if(!code) return;
+            
+            const zip = new JSZip();
+            zip.file("index.html", code);
+            zip.file("README.txt", "Generated by Community AI Project Vibe Coder.");
+            
+            zip.generateAsync({type:"blob"}).then(function(content) {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(content);
+                a.download = "community-app.zip";
+                a.click();
+            });
+        }
+
+        function emailMaster() {
+            const code = document.getElementById('app-preview').srcdoc;
+            console.log("Opening mail client...");
+            const subject = "Review: New Community App";
+            const safeCode = encodeURIComponent(code.substring(0, 1500) + "... (truncated)");
+            window.open(`mailto:stephen@weirdmachine.org?subject=${subject}&body=${safeCode}`);
+            appendCode('AI', 'Opened email client for review.', true);
+        }
+
+        // --- TYPEWRITER ---
+        const words = ["Accessibility", "Transparency", "Neighbors"];
+        let wIdx = 0;
+        function typingEffect() {
+            let word = words[wIdx].split("");
+            let el = document.getElementById('typewriter-text');
+            const loop = () => {
+                if(word.length > 0) { el.innerHTML += word.shift(); setTimeout(loop, 100); }
+                else { setTimeout(() => { el.innerHTML = ""; wIdx = (wIdx + 1) % words.length; typingEffect(); }, 2000); }
+            }; loop();
+        }
+
+        // --- RENDERER (FEATURED LOGIC PRESERVED) ---
+        function renderProjects(cat) {
+            const gridCont = document.getElementById('project-container');
+            const featCont = document.getElementById('featured-spotlight');
+            
+            // HOTFIX: Manually mark the specific agent as featured 
+            const fItem = projectsData.find(p => p.id === 'civic-agent');
+            if(fItem) fItem.featured = true;
+
+            gridCont.innerHTML = '';
+            
+            // 1. Handle Featured Display
+            if(cat === 'all') {
+                featCont.style.display = 'block';
+                const featured = projectsData.find(p => p.featured === true);
+                
+                if(featured) {
+                    featCont.innerHTML = `
+                        <div class="container">
+                            <div class="featured-wrapper">
+                                <div class="featured-app-container">
+                                    <div class="featured-header-bar">
+                                        <i data-lucide="monitor-play" width="14"></i> Featured App
+                                    </div>
+                                    <div class="iframe-wrapper">
+                                        <iframe src="${featured.links.open}" class="featured-app-frame" title="Featured App"></iframe>
+                                        <div class="scroll-indicator">
+                                            <i data-lucide="arrow-down" width="20"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="featured-info">
+                                    <div class="featured-label">
+                                        <span style="width:10px; height:10px; background:red; border-radius:50%; display:inline-block; animation:blink 1s infinite;"></span>
+                                        Live Preview
+                                    </div>
+                                    <h2 style="color:white; margin-bottom:20px; font-size:2.5rem;">${featured.title}</h2>
+                                    <p style="color:#cbd5e1; margin-bottom:30px;">${featured.description}</p>
+                                    
+                                    <div style="margin-bottom:30px;">
+                                        ${featured.techStack.map(t => `<span class="featured-tech-tag">${t}</span>`).join('')}
+                                    </div>
+                                    
+                                    <a href="${featured.links.open}" target="_blank" class="nav-btn special" style="text-align:center; justify-content:center;">
+                                        Open Full Screen <i data-lucide="external-link" width="16"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                featCont.style.display = 'none';
+            }
+
+            // 2. Render Grid (Skip featured item)
+            projectsData.forEach(p => {
+                if(cat !== 'all' && p.category !== cat) return;
+                if(cat === 'all' && p.featured) return; // Don't show twice
+
+                gridCont.innerHTML += `
+                <div class="card reveal-content visible">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                        <span class="badge-new">${p.badge || 'TOOL'}</span>
+                        <i data-lucide="${p.icon}" size="28" style="color:var(--primary-green)"></i>
+                    </div>
+                    <h3 style="margin-bottom:10px;">${p.title}</h3>
+                    <p style="font-size:0.95rem; margin-bottom:25px; flex-grow:1;">${p.description}</p>
+                    <a href="${p.links.open}" target="_blank" class="btn-launch">Launch Tool</a>
+                </div>`;
+            });
+            lucide.createIcons();
+        }
+        
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => { 
+            // Render Projects Immediately
+            renderProjects('all');
+            
+            // Trigger Visual Reveals
+            document.querySelectorAll('.reveal-content').forEach(el => el.classList.add('visible'));
+            
+            // Start Animations
+            typingEffect();
+            lucide.createIcons();
+
+            // Observe Mission Section
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateMissionChat();
+                        observer.disconnect();
+                    }
+                });
+            });
+            const missionSection = document.querySelector('#mission');
+            if (missionSection) {
+                observer.observe(missionSection);
+            }
+        });
+    </script>
+</body>
+</html>

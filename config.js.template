@@ -1,0 +1,10 @@
+// config.js - LOCAL DEVELOPMENT ONLY
+// ⚠️ DO NOT COMMIT THIS FILE TO GIT
+// ⚠️ DO NOT DEPLOY THIS FILE TO NETLIFY
+//
+// For local development, replace YOUR_API_KEY_HERE with your actual Gemini API key.
+// Get one at: https://aistudio.google.com/app/apikey
+
+window.CONFIG = {
+    API_KEY: "YOUR_API_KEY_HERE"
+};
