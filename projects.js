@@ -56,7 +56,7 @@ const projectsData = [
         badge: "Beta",
         featured: true,
         icon: "bot-message-square",
-        title: "Commit: the Community AI Agent",
+        title: "Commit: the Community AI Agent for Brookline, MA",
         description: "An experimental agental AI chatbot that helps you take real-world actions in your community.",
         techStack: ["AI Agent", "LangChain", "GCP"],
         links: { open: "https://commit-ai-civic-agent-390658405112.us-west1.run.app/" }
