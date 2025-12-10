@@ -737,7 +737,7 @@
                     <div class="get-involved-box">
                         <h3 style="margin-bottom:15px; color:#0f172a;">Get Involved</h3>
                         <p style="opacity:0.8; margin-bottom:20px; color:#334155;">Developers, organizers, leaders: Help us deploy these tools.</p>
-                        <a href="/cdn-cgi/l/email-protection#53202736233b363d1324363a21373e32303b3a3d367d3c21346c202631393630276e103c3e3e263d3a272a766163121a7661637e7661631436277661631a3d253c3f253637" class="btn-footer-contact" class="btn-footer-contact">
+                        <a href="/cdn-cgi/l/email-protection#9bf8f4f5effaf8efdbf9e9f4f4f0f7f2f5fef2f5effee9faf8eff2edfeb5f4e9fc" class="btn-footer-contact">
                             <i data-lucide="mail" width="18"></i> Contact Team
                         </a>
                     </div>
@@ -781,8 +781,6 @@
                     </div>
                     <div class="footer-logo-container">
                         <a href="https://weirdmachine.org"><img src="weirdmachine.png" alt="Weird Machine" class="footer-logo"></a>
-                    </div><div class="footer-logo-container">
-                        <a href="https://brooklineinteractive.org"><img src="secondary.png" alt="Brookline Interactive Group" class="footer-logo"></a>
                     </div>
                     <div id="google_translate_element" style="margin-top:15px;"></div>
                 </div>
@@ -791,7 +789,7 @@
 
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         window.CONFIG = {}; 
     </script>
     <script src="config.js" onerror="console.log('No local config found. Using Netlify Proxy.')"></script>
@@ -1371,4 +1369,12 @@
 
             function animateCodeLines() {
                 if (currentLine < codeLines.length) {
-                    codeLines[currentLine].classList.
+                    codeLines[currentLine].classList.add('visible');
+                    currentLine++;
+                    setTimeout(animateCodeLines, 150 + Math.random() * 100);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
