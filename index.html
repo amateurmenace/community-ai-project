@@ -277,11 +277,102 @@
             .featured-wrapper { grid-template-columns: 1fr; }
             .featured-app-container { height: 500px; border-right: none; border-bottom: 2px solid var(--primary-green); }
         }
+
+        /* --- ANIMATED CODE BLOCK --- */
+        .code-line {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .code-line.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .code-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.2em;
+            background: var(--code-text-purple);
+            margin-left: 2px;
+            animation: cursorBlink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
     <audio id="kitchen-timer-sound" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAADAAALMACKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKAAAA8TEAMEhvbWUAAAaQAAAAIwAAAAAAAAAAAAAA//uQxAAACmABQAAAAAAoAFAAAAAAABJAAAAAAAAAAJAAAAAAAAAAAAAAD/7kMQAAAMAFAAAAAAAwAUAAAAAAAekAAAAAAAAACQAAAAAAAAAAAAAA//uQxAAAAAAFAAAAAAAAAFAAAAAAAAJAAAAAAAAAAAkAAAAAAAAAAAAAAP/7kMQAAACABQAAAAAAIAFAAAAAAAH0gAAAAAAAAAJAAAAAAAAAAAAAAA//uQxAAAAUAFAAAAAAABQAUP/7kMQAAABQB8AAIAAACgD4AAIAAACQAAAAAAAAAAkAAAAAAAAAAAAAAP/7kMQAAABQB8AAIAAACgD4AAIAAACQAAAAAAAAAAkAAAAAAAAAAAAAAP/7kMQAAABQB8AAIAAACgD4AAIAAACQAAAAAAAAAAkAAAAAAAAAAAAAAP/7kMQAAABQB8AAIAAACgD4AAIAAACQAAAAAAAAAAkAAAAAAAAAAAAAAA=="></audio>
+
+    <!-- Accessibility Toolbar -->
+    <button id="a11y-toggle" class="a11y-toggle-btn" onclick="toggleA11yPanel()" aria-label="Accessibility Tools">
+        <i data-lucide="settings-2" width="20"></i>
+        <span>Accessibility</span>
+    </button>
+    
+    <div id="a11y-panel" class="a11y-panel">
+        <div class="a11y-header">
+            <h3><i data-lucide="accessibility" width="20"></i> Accessibility Tools</h3>
+            <button onclick="toggleA11yPanel()" class="a11y-close" aria-label="Close">
+                <i data-lucide="x" width="18"></i>
+            </button>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="languages" width="16"></i> Language / Translation</h4>
+            <div class="a11y-buttons">
+                <button onclick="setLanguage('en')" class="a11y-btn active" data-lang="en">English</button>
+                <button onclick="setLanguage('simple')" class="a11y-btn" data-lang="simple">Simple English</button>
+                <button onclick="setLanguage('es')" class="a11y-btn" data-lang="es">Español</button>
+                <button onclick="setLanguage('zh')" class="a11y-btn" data-lang="zh">中文</button>
+                <button onclick="setLanguage('pt')" class="a11y-btn" data-lang="pt">Português</button>
+                <button onclick="setLanguage('ht')" class="a11y-btn" data-lang="ht">Kreyòl</button>
+                <button onclick="setLanguage('vi')" class="a11y-btn" data-lang="vi">Tiếng Việt</button>
+                <button onclick="setLanguage('ru')" class="a11y-btn" data-lang="ru">Русский</button>
+            </div>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="type" width="16"></i> Text & Reading</h4>
+            <div class="a11y-row">
+                <span>Text Size</span>
+                <div class="a11y-size-controls">
+                    <button onclick="adjustTextSize(-2)" class="a11y-size-btn">A-</button>
+                    <button onclick="resetTextSize()" class="a11y-size-btn">Reset</button>
+                    <button onclick="adjustTextSize(2)" class="a11y-size-btn">A+</button>
+                </div>
+            </div>
+            <div class="a11y-row">
+                <span>Line Spacing</span>
+                <div class="a11y-size-controls">
+                    <button onclick="adjustLineHeight(-0.2)" class="a11y-size-btn">-</button>
+                    <button onclick="resetLineHeight()" class="a11y-size-btn">Reset</button>
+                    <button onclick="adjustLineHeight(0.2)" class="a11y-size-btn">+</button>
+                </div>
+            </div>
+            <div class="a11y-buttons">
+                <button onclick="toggleDyslexicFont()" class="a11y-btn" id="dyslexic-toggle">Dyslexia-Friendly Font</button>
+                <button onclick="toggleHighContrast()" class="a11y-btn" id="contrast-toggle">High Contrast</button>
+            </div>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="focus" width="16"></i> Focus & Motion</h4>
+            <div class="a11y-buttons">
+                <button onclick="toggleReducedMotion()" class="a11y-btn" id="motion-toggle">Reduce Motion</button>
+                <button onclick="toggleFocusHighlight()" class="a11y-btn" id="focus-toggle">Enhanced Focus</button>
+            </div>
+        </div>
+        
+        <div class="a11y-footer">
+            <button onclick="resetAllA11y()" class="a11y-reset-btn">
+                <i data-lucide="rotate-ccw" width="14"></i> Reset All Settings
+            </button>
+        </div>
+    </div>
 
     <div id="main-content">
         
@@ -302,12 +393,12 @@
                 <div class="hero-columns reveal-content">
                     <div class="hero-col">
                         <p class="hero-explainer">
-                            We are a decentralized coalition of neighbors, coders, and civic leaders. Our project builds open-source digital infrastructure that allows local communities to govern their own data, use AI for public good, and reclaim the future of their cities from big tech monopolies. 
+                            We are a coalition of neighbors, designers, media makers, and urban mechanics. Our project builds open-source digital infrastructure that allows communities to govern their own data, use AI for public good, and reclaim the future of their communities from big tech monopolies. 
                         </p>
                     </div>
                     <div class="hero-col">
                         <p class="hero-explainer">
-                            We believe true freedom is not just escaping or avoiding oppression - it is building a world without it. This site has some of our early attempts at building things for a more thoughtful, accessible, and creative democracy.
+                            We believe true freedom is not just escaping or avoiding oppression - it is building a world without it. This site has some of our early attempts at building things for a more caring, accessible, and creative democracy. This is just one beginning. There are so many more.
                         </p>
                     </div>
                 </div>
@@ -315,7 +406,7 @@
                 <div class="hero-nav reveal-content">
                     <a href="#apps" class="nav-btn">Browse Tools</a>
                     <a href="#values" class="nav-btn">Our Values</a>
-                    <a href="#mission" class="nav-btn">Mission Control</a>
+                    <a href="#mission" class="nav-btn">Our Mission</a>
                     <a href="#ai-playground" class="nav-btn special">
                         <i data-lucide="bot" width="18"></i> Playground
                     </a>
@@ -356,17 +447,17 @@
             <svg class="civic-doodle d-7" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <svg class="civic-doodle d-8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <svg class="civic-doodle d-9" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-            <div class="container reveal-content">
+            <div class="container">
                 <div class="values-grid-modern">
                     <div class="values-list">
                         <h2 style="margin-bottom:20px;">Our Values are Coded&nbsp;In.</h2>
                         <p style="margin-bottom:40px;">Principles that guide every line of code we write.</p>
                         
                         <div class="value-item-mod">
-                            <div class="v-icon"><i data-lucide="lock" color="#052e16"></i></div>
+                            <div class="v-icon"><i data-lucide="leaf" color="#052e16"></i></div>
                             <div class="v-content">
-                                <h4>Local-First Privacy</h4>
-                                <p>Data stays in the community. Tools run on local devices, not distant corporate clouds.</p>
+                                <h4>Climate Justice Seeking</h4>
+                                <p>We prioritize locally-run LLMs over frontier models to reduce carbon footprint and environmental impact.</p>
                             </div>
                         </div>
                         <div class="value-item-mod">
@@ -398,26 +489,36 @@
                             </div>
                         </div>
                         <div class="value-item-mod">
-                            <div class="v-icon"><i data-lucide="leaf" color="#052e16"></i></div>
+                            <div class="v-icon"><i data-lucide="cpu" color="#052e16"></i></div>
                             <div class="v-content">
                                 <h4>Sustainable Tech</h4>
                                 <p>We build lightweight, resilient tools that run on old hardware and don't require expensive upgrades.</p>
                             </div>
                         </div>
+                        
+                        <a href="morals.html" class="nav-btn" style="margin-top: 20px; justify-content: center;">
+                            <i data-lucide="heart" width="18"></i> Learn More About Our Values
+                        </a>
                     </div>
 
-                    <div>
-                        <div class="code-block-modern">
-                            <div><span style="color:#a855f7">const</span> civicStack = {</div>
-                            <div style="padding-left:20px;">owner: <span style="color:#d946ef">"The Public"</span>,</div>
-                            <div style="padding-left:20px;">model: <span style="color:#d946ef">"Open Source"</span>,</div>
-                            <div style="padding-left:20px;">profit: <span style="color:#3b82f6">false</span>,</div>
-                            <div style="padding-left:20px;">location: <span style="color:#d946ef">"Brookline, MA"</span>,</div>
-                            <div style="padding-left:20px;">data: <span style="color:#a855f7">function</span>() {</div>
-                            <div style="padding-left:40px; color:#9ca3af;">// Data never leaves device</div>
-                            <div style="padding-left:40px;"><span style="color:#a855f7">return</span> local.storage;</div>
-                            <div style="padding-left:20px;">}</div>
-                            <div>}</div>
+                    <div class="code-block-wrapper">
+                        <div class="code-block-modern" id="animated-code-block">
+                            <div class="code-line" data-line="1"><span style="color:#a855f7">const</span> civicStack = {</div>
+                            <div class="code-line" data-line="2" style="padding-left:20px;">owner: <span style="color:#d946ef">"The Public"</span>,</div>
+                            <div class="code-line" data-line="3" style="padding-left:20px;">model: <span style="color:#d946ef">"Open Source"</span>,</div>
+                            <div class="code-line" data-line="4" style="padding-left:20px;">profit: <span style="color:#3b82f6">false</span>,</div>
+                            <div class="code-line" data-line="5" style="padding-left:20px;">location: <span style="color:#d946ef">"Brookline, MA"</span>,</div>
+                            <div class="code-line" data-line="6" style="padding-left:20px;">climate: <span style="color:#d946ef">"Local-First"</span>,</div>
+                            <div class="code-line" data-line="7" style="padding-left:20px;">data: <span style="color:#a855f7">function</span>() {</div>
+                            <div class="code-line" data-line="8" style="padding-left:40px; color:#9ca3af;">// Data never leaves device</div>
+                            <div class="code-line" data-line="9" style="padding-left:40px;"><span style="color:#a855f7">return</span> local.storage;</div>
+                            <div class="code-line" data-line="10" style="padding-left:20px;">},</div>
+                            <div class="code-line" data-line="11" style="padding-left:20px;">values: [</div>
+                            <div class="code-line" data-line="12" style="padding-left:40px;"><span style="color:#d946ef">"transparency"</span>,</div>
+                            <div class="code-line" data-line="13" style="padding-left:40px;"><span style="color:#d946ef">"accessibility"</span>,</div>
+                            <div class="code-line" data-line="14" style="padding-left:40px;"><span style="color:#d946ef">"community"</span></div>
+                            <div class="code-line" data-line="15" style="padding-left:20px;">]</div>
+                            <div class="code-line" data-line="16">}<span class="code-cursor"></span></div>
                         </div>
                     </div>
                 </div>
@@ -439,6 +540,9 @@
                     <p style="margin: 0 auto; font-size:1.2rem;">
                         We apply the speed of modern software development to slow-moving civic problems. By deploying micro-apps for specific neighborhood needs, we can iterate faster than bureaucracy allows, while maintaining the safety and inclusivity required for public life.
                     </p>
+                    <a href="process.html" class="nav-btn" style="margin-top: 30px;">
+                        <i data-lucide="flask-conical" width="18"></i> Learn More About Our Methods
+                    </a>
                 </div>
             </div>
         </section>
@@ -469,6 +573,12 @@
                         <p class="m-text">Our goal isn't just "smarter" cities, but <strong>stronger citizens</strong>. Reducing tedious admin so volunteers can focus on action.</p>
                     </div>
                 </div>
+                
+                <div class="text-center" style="margin-top: 40px;">
+                    <a href="mission.html" class="nav-btn">
+                        <i data-lucide="compass" width="18"></i> Learn More About Our Mission
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -478,24 +588,24 @@
             <svg class="civic-doodle d-15" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             <div class="sketch-overlay"></div>
             <div class="container reveal-content">
-                <h2 class="text-center">The Builders Network</h2>
+                <h2 class="text-center">The Builders</h2>
                 <p class="text-center" style="margin-bottom:50px;">A collaboration between public media makers and creative technologists.</p>
                 <div class="builders-grid">
                     <div class="b-card">
                         <i data-lucide="code" size="48" style="color:var(--primary-green); margin-bottom:20px;"></i>
                         <span class="b-role">Architecture + Design</span>
                         <h3>Weird Machine</h3>
-                        <p>The avatar and project database for creative technologist and community media trickster <a href="https://weirdmachine.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Stephen Walter</a>.</p>
+                        <p>The R&D lab for creative technologist and community media hooligan <a href="https://weirdmachine.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Stephen Walter</a>.</p>
                     </div>
                     <div class="b-card">
                         <i data-lucide="radio" size="48" style="color:var(--primary-green); margin-bottom:20px;"></i>
                         <span class="b-role">Community Home</span>
                         <h3>Brookline Interactive Group</h3>
-                        <p>Public access media & civic hub located in <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Brookline, MA</a>.</p>
+                        <p>Nonprofit community media center & civic hub located in <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Brookline, MA</a>.</p>
                     </div>
                     <div class="b-card">
                         <i data-lucide="database" size="48" style="color:var(--primary-green); margin-bottom:20px;"></i>
-                        <span class="b-role">Data Strategy</span>
+                        <span class="b-role">Data + Policy Strategy</span>
                         <h3>Neighborhood AI</h3>
                         <p>Local data models & policy experts based in <a href="https://neighborhoodai.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Boston & New York</a>.</p>
                     </div>
@@ -633,33 +743,32 @@
                     </div>
                     <div class="footer-col">
                         <h4>Project</h4>
-                        <a href="#apps">Tools</a>
-                        <a href="#values">Values</a>
-                        <a href="#mission">Mission Control</a>
+                        <a href="process.html">Methods</a>
+                        <a href="mission.html">Missions</a>
+                        <a href="morals.html">Moral Compass</a>
                     </div>
                     <div class="footer-col">
                         <h4>Resources</h4>
-                        <a href="#">GitHub</a>
-                        <a href="#">Documentation</a>
-                        <a href="#">Guidelines</a>
+                        <a href="https://github.com/amateurmenace" target="_blank">GitHub</a>
+                        <a href="terms.html">Terms & License</a>
                     </div>
                     <div class="footer-col">
-                        <h4>Partners</h4>
-                        <a href="#">Brookline Interactive</a>
-                        <a href="#">Weird Machine</a>
-                        <a href="#">Neighborhood.AI</a>
+                        <h4>Makers & Shakers</h4>
+                        <a href="https://brooklineinteractive.org" target="_blank">Brookline Interactive Group</a>
+                        <a href="https://neighborhoodai.org" target="_blank">Neighborhood AI</a>
+                        <a href="https://weirdmachine.org" target="_blank">Stephen Walter</a>
                     </div>
                 </div>
                 <div class="footer-bottom" style="flex-direction: column; gap: 20px; text-align: center; border-top:1px solid #cbd5e1; padding-top:40px;">
-                    <div class="footer-logo-container">
-                        <img src="secondary.png" alt="Brookline Interactive Group" class="footer-logo">
-                    </div>
+                    
+                    
                     <div style="font-size: 0.9rem; color: #64748b;">
                         A community AI app from <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Brookline Interactive Group</a> in partnership with <a href="https://neighborhoodai.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Neighborhood AI</a>.
                     </div>
                     <div style="font-size: 0.9rem; color: #64748b;">
                         Designed and developed by <a href="https://weirdmachine.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Stephen Walter</a> + AI.
                     </div>
+                    
                     <div style="display:flex; justify-content:center; gap:15px; align-items:center; margin-top:10px;">
                         <a href="https://github.com/amateurmenace/community-ai" target="_blank" aria-label="GitHub">
                             <i data-lucide="github" width="20" style="color:var(--primary-green);"></i>
@@ -669,6 +778,9 @@
                             <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height:1.2em;">
                             <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" style="height:1.2em;">
                         </a>
+                    </div>
+                    <div class="footer-logo-container">
+                        <a href="https://weirdmachine.org"><img src="weirdmachine.png" alt="Weird Machine" class="footer-logo"></a>
                     </div>
                     <div id="google_translate_element" style="margin-top:15px;"></div>
                 </div>
@@ -682,10 +794,23 @@
     </script>
     <script src="config.js" onerror="console.log('No local config found. Using Netlify Proxy.')"></script>
     <script src="projects.js"></script>
+    <script src="a11y.js"></script>
     <script>function googleTranslateElementInit() { new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element'); }</script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
+        // --- IDENTITY REGENERATION STYLES ---
+        const identityStyles = [
+            "Solarpunk & Ecological (e.g., 'Moss & Mainframe')",
+            "Brutalist & Bureaucratic (e.g., 'Department of Algorithmic Welfare')",
+            "Cozy & Neighborhood (e.g., 'The Porch Robot Collective')",
+            "Abstract & High-Tech (e.g., 'Neural Pavement')",
+            "Rebellious & Punk (e.g., 'Against The Black Box')",
+            "Whimsical & Weird (e.g., 'Ghosts in the Zoning Board')",
+            "Civic & Serious (e.g., 'Public Code Works')"
+        ];
+        let previousNames = ["The Community AI Project"];
+
         // --- HYBRID API CALLER ---
         async function callGemini(payload) {
             // DETECT LOCALHOST
@@ -781,22 +906,53 @@
         async function regenerateIdentity() {
             const btn = document.getElementById('regen-btn');
             const titleEl = document.getElementById('site-title');
-            btn.innerHTML = `<i data-lucide="loader" class="spin"></i> Generating...`;
+            
+            // UI Feedback
+            btn.innerHTML = `<i data-lucide="loader" class="spin"></i> Inventing...`;
             lucide.createIcons();
             
+            // Pick a random style from the list
+            const randomStyle = identityStyles[Math.floor(Math.random() * identityStyles.length)];
+            
+            // Construct a dynamic prompt
+            const promptText = `
+                Task: Invent a new name for a grassroots organization that builds open-source AI for local neighborhoods.
+                
+                Current Vibe/Style to use: ${randomStyle}.
+                
+                Constraints:
+                1. Max 5 words.
+            
+                2. Make it sound like a band name or a government department, not a startup.
+                3. DO NOT use any of these names: ${previousNames.join(", ")}.
+                4. Output ONLY the name. No quotes.
+            `;
             try {
                 const resp = await callGemini({ 
-                    contents: [{ parts: [{ text: "Generate exactly ONE creative, modern name for a community AI civic tech project. 3-5 words max. Output ONLY the name itself, nothing else. No quotes, no numbering, no explanation." }] }],
-                    generationConfig: { candidateCount: 1, maxOutputTokens: 30 }
+                    contents: [{ parts: [{ text: promptText }] }],
+                    generationConfig: { 
+                        candidateCount: 1, 
+                        maxOutputTokens: 30,
+                        temperature: 1.3 // High temperature forces high creativity/randomness
+                    }
                 });
+                
                 const data = await resp.json();
                 if(data.candidates) {
                     let name = data.candidates[0].content.parts[0].text.trim();
-                    // Clean up any extra formatting
+                    // Cleanup
                     name = name.replace(/^[\d\.\-\*]+\s*/, '').replace(/["']/g, '').split('\n')[0].trim();
+                    
+                    // Update Title
                     titleEl.innerText = name;
+                    
+                    // Add to history so it doesn't repeat
+                    previousNames.push(name);
                 }
-            } catch(e) { console.error("Regen failed", e); }
+            } catch(e) { 
+                console.error("Regen failed", e); 
+                titleEl.innerText = "The Glitch Collective"; // Fallback name
+            }
             
             btn.innerHTML = `<i data-lucide="refresh-cw"></i> Regenerate Identity`;
             lucide.createIcons();
@@ -1099,10 +1255,13 @@
                 if(featured) {
                     featCont.innerHTML = `
                         <div class="container">
+                            <div class="featured-section-title">
+                                <h3><i data-lucide="star" width="28"></i> Featured App</h3>
+                            </div>
                             <div class="featured-wrapper">
                                 <div class="featured-app-container">
                                     <div class="featured-header-bar">
-                                        <i data-lucide="monitor-play" width="14"></i> Featured App
+                                        <i data-lucide="monitor-play" width="14"></i> Live Demo
                                     </div>
                                     <div class="iframe-wrapper">
                                         <iframe src="${featured.links.open}" class="featured-app-frame" title="Featured App"></iframe>
@@ -1178,7 +1337,44 @@
             if (missionSection) {
                 observer.observe(missionSection);
             }
+
+            // --- ANIMATED CODE BLOCK ---
+            initAnimatedCodeBlock();
         });
+
+        // --- ANIMATED CODE BLOCK ---
+        function initAnimatedCodeBlock() {
+            const codeBlock = document.getElementById('animated-code-block');
+            if (!codeBlock) return;
+
+            const codeLines = codeBlock.querySelectorAll('.code-line');
+            let currentLine = 0;
+            let animationStarted = false;
+
+            // Create intersection observer for values section
+            const valuesSection = document.getElementById('values');
+            
+            const codeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !animationStarted) {
+                        animationStarted = true;
+                        animateCodeLines();
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            if (valuesSection) {
+                codeObserver.observe(valuesSection);
+            }
+
+            function animateCodeLines() {
+                if (currentLine < codeLines.length) {
+                    codeLines[currentLine].classList.add('visible');
+                    currentLine++;
+                    setTimeout(animateCodeLines, 150 + Math.random() * 100);
+                }
+            }
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Methods | The Community AI Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .page-hero {
+            background: var(--bg-cream);
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            background-image: 
+                linear-gradient(rgba(5, 46, 22, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(5, 46, 22, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .page-hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .page-hero .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .content-section {
+            padding: 100px 0;
+            background: var(--bg-white);
+        }
+        .content-section:nth-child(even) {
+            background: var(--bg-cream);
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .content-grid.reverse {
+            direction: rtl;
+        }
+        .content-grid.reverse > * {
+            direction: ltr;
+        }
+        .content-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+        }
+        .content-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .process-visual {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border-radius: 16px;
+            padding: 50px;
+            border: 2px solid var(--accent-lime);
+            box-shadow: 12px 12px 0 rgba(74, 222, 128, 0.2);
+        }
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-lime);
+            transition: transform 0.2s;
+        }
+        .process-step:hover {
+            transform: translateX(10px);
+        }
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .step-content h4 {
+            margin-bottom: 5px;
+            color: var(--primary-green);
+        }
+        .step-content p {
+            margin: 0;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+        .highlight-box {
+            background: var(--code-bg-purple);
+            border: 2px solid var(--code-text-purple);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+        .highlight-box h3 {
+            color: var(--code-text-purple);
+            margin-bottom: 15px;
+        }
+        .quote-block {
+            border-left: 4px solid var(--accent-lime);
+            padding-left: 30px;
+            margin: 40px 0;
+            font-style: italic;
+            font-size: 1.3rem;
+            color: var(--primary-green);
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 30px;
+            transition: gap 0.2s;
+        }
+        .back-link:hover {
+            gap: 15px;
+        }
+        @media (max-width: 900px) {
+            .content-grid, .content-grid.reverse {
+                grid-template-columns: 1fr;
+                direction: ltr;
+            }
+            .page-hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility Toolbar -->
+    <button id="a11y-toggle" class="a11y-toggle-btn" onclick="toggleA11yPanel()" aria-label="Accessibility Tools">
+        <i data-lucide="settings-2" width="20"></i>
+        <span>Accessibility</span>
+    </button>
+    
+    <div id="a11y-panel" class="a11y-panel">
+        <div class="a11y-header">
+            <h3><i data-lucide="accessibility" width="20"></i> Accessibility Tools</h3>
+            <button onclick="toggleA11yPanel()" class="a11y-close" aria-label="Close">
+                <i data-lucide="x" width="18"></i>
+            </button>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="languages" width="16"></i> Language / Translation</h4>
+            <div class="a11y-buttons">
+                <button onclick="setLanguage('en')" class="a11y-btn active" data-lang="en">English</button>
+                <button onclick="setLanguage('simple')" class="a11y-btn" data-lang="simple">Simple English</button>
+                <button onclick="setLanguage('es')" class="a11y-btn" data-lang="es">Español</button>
+                <button onclick="setLanguage('zh')" class="a11y-btn" data-lang="zh">中文</button>
+                <button onclick="setLanguage('pt')" class="a11y-btn" data-lang="pt">Português</button>
+                <button onclick="setLanguage('ht')" class="a11y-btn" data-lang="ht">Kreyòl</button>
+                <button onclick="setLanguage('vi')" class="a11y-btn" data-lang="vi">Tiếng Việt</button>
+                <button onclick="setLanguage('ru')" class="a11y-btn" data-lang="ru">Русский</button>
+            </div>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="type" width="16"></i> Text & Reading</h4>
+            <div class="a11y-row">
+                <span>Text Size</span>
+                <div class="a11y-size-controls">
+                    <button onclick="adjustTextSize(-2)" class="a11y-size-btn">A-</button>
+                    <button onclick="resetTextSize()" class="a11y-size-btn">Reset</button>
+                    <button onclick="adjustTextSize(2)" class="a11y-size-btn">A+</button>
+                </div>
+            </div>
+            <div class="a11y-row">
+                <span>Line Spacing</span>
+                <div class="a11y-size-controls">
+                    <button onclick="adjustLineHeight(-0.2)" class="a11y-size-btn">-</button>
+                    <button onclick="resetLineHeight()" class="a11y-size-btn">Reset</button>
+                    <button onclick="adjustLineHeight(0.2)" class="a11y-size-btn">+</button>
+                </div>
+            </div>
+            <div class="a11y-buttons">
+                <button onclick="toggleDyslexicFont()" class="a11y-btn" id="dyslexic-toggle">Dyslexia-Friendly Font</button>
+                <button onclick="toggleHighContrast()" class="a11y-btn" id="contrast-toggle">High Contrast</button>
+            </div>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="focus" width="16"></i> Focus & Motion</h4>
+            <div class="a11y-buttons">
+                <button onclick="toggleReducedMotion()" class="a11y-btn" id="motion-toggle">Reduce Motion</button>
+                <button onclick="toggleFocusHighlight()" class="a11y-btn" id="focus-toggle">Enhanced Focus</button>
+            </div>
+        </div>
+        
+        <div class="a11y-footer">
+            <button onclick="resetAllA11y()" class="a11y-reset-btn">
+                <i data-lucide="rotate-ccw" width="14"></i> Reset All Settings
+            </button>
+        </div>
+    </div>
+
+    <div class="page-hero">
+        <div class="container">
+            <a href="index.html" class="back-link">
+                <i data-lucide="arrow-left" width="20"></i> Back to Home
+            </a>
+            <h1>Our Methods</h1>
+            <p class="subtitle">How we use play, prototyping, and iteration to build AI tools that address real-world community issues.</p>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="content-grid">
+                <div class="content-text">
+                    <h2>Play as Practice</h2>
+                    <p>We believe that the best civic technology emerges from a spirit of play and experimentation. Rather than treating technology development as a rigid, top-down process, we embrace curiosity, tinkering, and creative exploration.</p>
+                    <p>Play allows us to ask "what if?" without the pressure of perfection. It creates space for unexpected solutions and helps us understand community needs in ways that formal requirements gathering never could.</p>
+                    <p>When we play with ideas, we discover possibilities that structured processes would never reveal. Our tools are born from genuine curiosity about how technology might serve neighbors, not from product roadmaps.</p>
+                </div>
+                <div class="process-visual">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Explore</h4>
+                            <p>Discover community needs through conversation and observation</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Experiment</h4>
+                            <p>Build rapid prototypes to test ideas quickly</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Evaluate</h4>
+                            <p>Test with real users and gather honest feedback</p>
+                        </div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Iterate</h4>
+                            <p>Refine, improve, and sometimes start over</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="content-grid reverse">
+                <div class="content-text">
+                    <h2>Micro-Prototyping</h2>
+                    <p>Instead of building monolithic applications, we create small, focused tools—what we call "micro-apps"—that solve specific problems for specific communities. These tools are designed to be:</p>
+                    <p><strong>Lightweight:</strong> They run on modest hardware and don't require expensive infrastructure.</p>
+                    <p><strong>Modular:</strong> They can be combined, adapted, or replaced as needs change.</p>
+                    <p><strong>Fast to deploy:</strong> We can get working prototypes into community hands within days, not months.</p>
+                    <p>This approach lets us iterate faster than traditional civic technology development, while still maintaining the safety and inclusivity required for public-serving applications.</p>
+                </div>
+                <div class="process-visual" style="background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border-color: var(--code-text-purple);">
+                    <div style="font-family: var(--font-mono); font-size: 0.9rem;">
+                        <div style="color: var(--code-text-purple); margin-bottom: 15px;">// Our development philosophy</div>
+                        <div><span style="color: #a855f7;">const</span> approach = {</div>
+                        <div style="padding-left: 20px;">buildTime: <span style="color: #d946ef;">"days, not months"</span>,</div>
+                        <div style="padding-left: 20px;">scope: <span style="color: #d946ef;">"focused, not bloated"</span>,</div>
+                        <div style="padding-left: 20px;">feedback: <span style="color: #d946ef;">"continuous"</span>,</div>
+                        <div style="padding-left: 20px;">failure: <span style="color: #d946ef;">"expected & valued"</span>,</div>
+                        <div style="padding-left: 20px;">ownership: <span style="color: #d946ef;">"community"</span></div>
+                        <div>};</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="content-grid">
+                <div class="content-text">
+                    <h2>AI as Tool, Not Author</h2>
+                    <p>We use AI extensively in our development process—but in a very specific way. <strong>AI helps us code, but humans generate the ideas.</strong></p>
+                    <p>This distinction matters. The challenges facing our communities are deeply human: housing, accessibility, civic engagement, democratic participation. These require human understanding, empathy, and lived experience to identify and frame correctly.</p>
+                    <p>Once we've identified what to build and why, AI becomes a powerful accelerator. It helps us write code faster, debug issues, and explore technical possibilities. But the vision, the values, and the priorities remain firmly in human hands—specifically, in the hands of the communities we serve.</p>
+                    
+                    <div class="highlight-box">
+                        <h3>Our AI Coding Workflow</h3>
+                        <p style="margin-bottom: 10px;"><strong>Human:</strong> Identifies the problem, talks to neighbors, frames the need</p>
+                        <p style="margin-bottom: 10px;"><strong>Human:</strong> Designs the solution approach and user experience</p>
+                        <p style="margin-bottom: 10px;"><strong>AI:</strong> Assists with implementation, code generation, debugging</p>
+                        <p style="margin-bottom: 0;"><strong>Human:</strong> Reviews, tests, refines, and makes final decisions</p>
+                    </div>
+                </div>
+                <div class="process-visual">
+                    <div class="quote-block" style="border-color: var(--primary-green); padding: 0; margin: 0; border-left-width: 4px;">
+                        "Technology is not neutral. It reflects the values of its creators. By keeping human judgment at the center of our design process, we ensure our tools serve community values, not algorithmic ones."
+                    </div>
+                    <div style="margin-top: 30px; padding: 25px; background: white; border-radius: 12px;">
+                        <h4 style="margin-bottom: 15px; color: var(--primary-green);">What AI Won't Do:</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i data-lucide="x-circle" width="18" style="color: #ef4444;"></i>
+                                Decide what problems to solve
+                            </li>
+                            <li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i data-lucide="x-circle" width="18" style="color: #ef4444;"></i>
+                                Replace community input
+                            </li>
+                            <li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i data-lucide="x-circle" width="18" style="color: #ef4444;"></i>
+                                Make ethical decisions for us
+                            </li>
+                            <li style="display: flex; align-items: center; gap: 10px;">
+                                <i data-lucide="x-circle" width="18" style="color: #ef4444;"></i>
+                                Operate without human oversight
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="text-align: center;">
+        <div class="container">
+            <h2>Ready to Build With Us?</h2>
+            <p style="max-width: 600px; margin: 0 auto 30px;">We're always looking for community members, developers, and civic leaders who want to experiment with new approaches to local challenges.</p>
+            <a href="index.html#ai-playground" class="nav-btn special">
+                <i data-lucide="hammer" width="18"></i> Try the AI Playground
+            </a>
+        </div>
+    </section>
+
+    <footer class="modern-footer">
+        <div class="container">
+            <div class="footer-bottom" style="flex-direction: column; gap: 20px; text-align: center; border-top: none; padding-top: 0;">
+                <div class="footer-logo-container">
+                    <img src="secondary.png" alt="Brookline Interactive Group" class="footer-logo">
+                </div>
+                <div style="font-size: 0.9rem; color: #64748b;">
+                    A community AI project from <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Brookline Interactive Group</a>
+                </div>
+                <a href="index.html" class="nav-btn" style="margin-top: 10px;">
+                    <i data-lucide="home" width="16"></i> Return Home
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="a11y.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

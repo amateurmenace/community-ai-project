@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & License | The Community AI Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .page-hero {
+            background: var(--bg-cream);
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            background-image: 
+                linear-gradient(rgba(5, 46, 22, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(5, 46, 22, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .page-hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .page-hero .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .content-section {
+            padding: 80px 0;
+            background: var(--bg-white);
+        }
+        .legal-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .legal-content h2 {
+            font-size: 2rem;
+            margin: 50px 0 25px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .legal-content h2:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+        .legal-content h3 {
+            font-size: 1.3rem;
+            margin: 30px 0 15px;
+            color: var(--primary-green);
+        }
+        .legal-content p, .legal-content li {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        .legal-content ul {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+        .license-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border: 2px solid var(--accent-lime);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .license-icons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .license-icons img {
+            height: 40px;
+        }
+        .license-box h3 {
+            margin-bottom: 15px;
+        }
+        .license-box p {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .highlight-box {
+            background: var(--code-bg-purple);
+            border: 2px solid var(--code-text-purple);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .highlight-box h4 {
+            color: var(--code-text-purple);
+            margin-bottom: 10px;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .warning-box h4 {
+            color: #d97706;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 30px;
+            transition: gap 0.2s;
+        }
+        .back-link:hover {
+            gap: 15px;
+        }
+        .toc {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+        .toc h4 {
+            margin-bottom: 15px;
+            color: var(--primary-green);
+        }
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .toc li {
+            margin-bottom: 8px;
+        }
+        .toc a {
+            color: var(--button-green);
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .contact-box {
+            background: var(--bg-cream);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        @media (max-width: 900px) {
+            .page-hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility Toolbar -->
+    <button id="a11y-toggle" class="a11y-toggle-btn" onclick="toggleA11yPanel()" aria-label="Accessibility Tools">
+        <i data-lucide="settings-2" width="20"></i>
+        <span>Accessibility</span>
+    </button>
+    
+    <div id="a11y-panel" class="a11y-panel">
+        <div class="a11y-header">
+            <h3><i data-lucide="accessibility" width="20"></i> Accessibility Tools</h3>
+            <button onclick="toggleA11yPanel()" class="a11y-close" aria-label="Close">
+                <i data-lucide="x" width="18"></i>
+            </button>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="languages" width="16"></i> Language / Translation</h4>
+            <div class="a11y-buttons">
+                <button onclick="setLanguage('en')" class="a11y-btn active" data-lang="en">English</button>
+                <button onclick="setLanguage('simple')" class="a11y-btn" data-lang="simple">Simple English</button>
+                <button onclick="setLanguage('es')" class="a11y-btn" data-lang="es">Español</button>
+                <button onclick="setLanguage('zh')" class="a11y-btn" data-lang="zh">中文</button>
+                <button onclick="setLanguage('pt')" class="a11y-btn" data-lang="pt">Português</button>
+                <button onclick="setLanguage('ht')" class="a11y-btn" data-lang="ht">Kreyòl</button>
+                <button onclick="setLanguage('vi')" class="a11y-btn" data-lang="vi">Tiếng Việt</button>
+                <button onclick="setLanguage('ru')" class="a11y-btn" data-lang="ru">Русский</button>
+            </div>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="type" width="16"></i> Text & Reading</h4>
+            <div class="a11y-row">
+                <span>Text Size</span>
+                <div class="a11y-size-controls">
+                    <button onclick="adjustTextSize(-2)" class="a11y-size-btn">A-</button>
+                    <button onclick="resetTextSize()" class="a11y-size-btn">Reset</button>
+                    <button onclick="adjustTextSize(2)" class="a11y-size-btn">A+</button>
+                </div>
+            </div>
+            <div class="a11y-row">
+                <span>Line Spacing</span>
+                <div class="a11y-size-controls">
+                    <button onclick="adjustLineHeight(-0.2)" class="a11y-size-btn">-</button>
+                    <button onclick="resetLineHeight()" class="a11y-size-btn">Reset</button>
+                    <button onclick="adjustLineHeight(0.2)" class="a11y-size-btn">+</button>
+                </div>
+            </div>
+            <div class="a11y-buttons">
+                <button onclick="toggleDyslexicFont()" class="a11y-btn" id="dyslexic-toggle">Dyslexia-Friendly Font</button>
+                <button onclick="toggleHighContrast()" class="a11y-btn" id="contrast-toggle">High Contrast</button>
+            </div>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="focus" width="16"></i> Focus & Motion</h4>
+            <div class="a11y-buttons">
+                <button onclick="toggleReducedMotion()" class="a11y-btn" id="motion-toggle">Reduce Motion</button>
+                <button onclick="toggleFocusHighlight()" class="a11y-btn" id="focus-toggle">Enhanced Focus</button>
+            </div>
+        </div>
+        
+        <div class="a11y-footer">
+            <button onclick="resetAllA11y()" class="a11y-reset-btn">
+                <i data-lucide="rotate-ccw" width="14"></i> Reset All Settings
+            </button>
+        </div>
+    </div>
+
+    <div class="page-hero">
+        <div class="container">
+            <a href="index.html" class="back-link">
+                <i data-lucide="arrow-left" width="20"></i> Back to Home
+            </a>
+            <h1>Terms & License</h1>
+            <p class="subtitle">How you can use, share, and build upon The Community AI Project.</p>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="legal-content">
+                
+                <div class="license-box">
+                    <div class="license-icons">
+                        <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="Creative Commons">
+                        <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="Attribution">
+                        <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="Share Alike">
+                    </div>
+                    <h3>Creative Commons Attribution-ShareAlike 4.0</h3>
+                    <p>The Community AI Project is released under the <strong>CC BY-SA 4.0</strong> license. This means you're free to share, adapt, and build upon our work—even commercially—as long as you give credit and share your improvements under the same terms.</p>
+                    <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" class="nav-btn" style="margin-top: 20px;">
+                        <i data-lucide="external-link" width="16"></i> View Full License
+                    </a>
+                </div>
+
+                <div class="toc">
+                    <h4>On This Page</h4>
+                    <ul>
+                        <li><a href="#license">License Summary</a></li>
+                        <li><a href="#use">Acceptable Use</a></li>
+                        <li><a href="#privacy">Privacy & Data</a></li>
+                        <li><a href="#disclaimer">Disclaimers</a></li>
+                        <li><a href="#contributions">Contributing</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <h2 id="license">License Summary</h2>
+                
+                <h3>You Are Free To:</h3>
+                <ul>
+                    <li><strong>Share</strong> — copy and redistribute the material in any medium or format</li>
+                    <li><strong>Adapt</strong> — remix, transform, and build upon the material for any purpose, including commercial use</li>
+                </ul>
+
+                <h3>Under These Terms:</h3>
+                <ul>
+                    <li><strong>Attribution</strong> — You must give appropriate credit to The Community AI Project, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests we endorse you or your use.</li>
+                    <li><strong>ShareAlike</strong> — If you remix, transform, or build upon the material, you must distribute your contributions under the same CC BY-SA 4.0 license.</li>
+                    <li><strong>No Additional Restrictions</strong> — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <h4>Why We Chose CC BY-SA</h4>
+                    <p>We want our tools to be genuinely useful to communities everywhere. The ShareAlike provision ensures that improvements and adaptations remain open source, building a commons of civic technology that benefits everyone.</p>
+                </div>
+
+                <h2 id="use">Acceptable Use</h2>
+                
+                <p>Our tools are designed for civic purposes: helping communities engage with their local government, making public information more accessible, and supporting democratic participation. We encourage use that aligns with these goals.</p>
+
+                <h3>Please Do:</h3>
+                <ul>
+                    <li>Use our tools to increase civic engagement in your community</li>
+                    <li>Adapt and improve the tools to meet local needs</li>
+                    <li>Share your improvements with other communities</li>
+                    <li>Use the tools for education and research</li>
+                    <li>Build complementary tools that serve the public good</li>
+                </ul>
+
+                <h3>Please Don't:</h3>
+                <ul>
+                    <li>Use the tools to spread misinformation about civic processes</li>
+                    <li>Attempt to overwhelm or disrupt public services</li>
+                    <li>Use the tools for surveillance or to violate privacy</li>
+                    <li>Remove attribution when sharing or building on our work</li>
+                    <li>Use our name to imply endorsement of unrelated projects</li>
+                </ul>
+
+                <div class="warning-box">
+                    <h4><i data-lucide="alert-triangle" width="20"></i> No Warranty</h4>
+                    <p>Our tools are provided "as is" without warranty of any kind. We do our best to build reliable, useful software, but we cannot guarantee accuracy, availability, or fitness for any particular purpose. Use your own judgment when relying on AI-generated content or analysis.</p>
+                </div>
+
+                <h2 id="privacy">Privacy & Data</h2>
+                
+                <p>We take privacy seriously. Here's how we handle data:</p>
+
+                <h3>What We Collect</h3>
+                <ul>
+                    <li><strong>Minimal Analytics</strong> — We may collect anonymous usage statistics to improve our tools. This never includes personal information.</li>
+                    <li><strong>User-Provided Content</strong> — When you use tools like Community Highlighter, the content you submit (like YouTube URLs) is processed to provide the service. We don't store this content longer than necessary.</li>
+                    <li><strong>No Tracking</strong> — We don't use advertising trackers, sell data, or build user profiles.</li>
+                </ul>
+
+                <h3>Third-Party Services</h3>
+                <p>Some of our tools currently use third-party AI services (like OpenAI or Google's Gemini) to provide functionality. When you use these tools, your queries may be processed by those services according to their privacy policies. We're actively working to transition to local LLM alternatives to reduce this dependency.</p>
+
+                <h3>Your Rights</h3>
+                <ul>
+                    <li>You can use our tools without creating accounts wherever possible</li>
+                    <li>You can request deletion of any data we may have collected</li>
+                    <li>You can self-host our tools to maintain complete control</li>
+                </ul>
+
+                <h2 id="disclaimer">Disclaimers</h2>
+
+                <h3>Not Legal or Professional Advice</h3>
+                <p>Our tools provide information to help you engage with civic processes, but this is not legal, financial, or professional advice. Always consult qualified professionals for important decisions.</p>
+
+                <h3>AI-Generated Content</h3>
+                <p>Many of our tools use AI to summarize, translate, or analyze content. AI can make mistakes. Always verify important information from original sources, especially for civic matters where accuracy is crucial.</p>
+
+                <h3>Availability</h3>
+                <p>We provide these tools as a public service, but we cannot guarantee uptime or availability. For mission-critical applications, consider self-hosting.</p>
+
+                <h2 id="contributions">Contributing</h2>
+                
+                <p>We welcome contributions! By submitting code, documentation, or other content to our projects, you agree to license your contributions under the same CC BY-SA 4.0 license.</p>
+
+                <h3>How to Contribute</h3>
+                <ul>
+                    <li><strong>Code</strong> — Submit pull requests on <a href="https://github.com/amateurmenace" target="_blank" style="color: var(--primary-green);">GitHub</a></li>
+                    <li><strong>Bug Reports</strong> — Open issues on the relevant repository</li>
+                    <li><strong>Ideas</strong> — Join discussions on GitHub or reach out directly</li>
+                    <li><strong>Documentation</strong> — Help improve our guides and explanations</li>
+                </ul>
+
+                <h2 id="contact">Contact</h2>
+                
+                <div class="contact-box">
+                    <h3>Questions About These Terms?</h3>
+                    <p style="margin-bottom: 20px;">If you have questions about licensing, acceptable use, or anything else, we're happy to help.</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <a href="https://github.com/amateurmenace" target="_blank" class="nav-btn">
+                            <i data-lucide="github" width="18"></i> GitHub
+                        </a>
+                        <a href="https://brooklineinteractive.org" target="_blank" class="nav-btn">
+                            <i data-lucide="building" width="18"></i> Brookline Interactive
+                        </a>
+                    </div>
+                </div>
+
+                <p style="margin-top: 50px; font-size: 0.9rem; color: #64748b; text-align: center;">
+                    Last updated: December 2024
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="modern-footer">
+        <div class="container">
+            <div class="footer-bottom" style="flex-direction: column; gap: 20px; text-align: center; border-top: none; padding-top: 0;">
+                <div class="footer-logo-container">
+                    <img src="secondary.png" alt="Brookline Interactive Group" class="footer-logo">
+                </div>
+                <div style="font-size: 0.9rem; color: #64748b;">
+                    A community AI project from <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Brookline Interactive Group</a>
+                </div>
+                <a href="index.html" class="nav-btn" style="margin-top: 10px;">
+                    <i data-lucide="home" width="16"></i> Return Home
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="a11y.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

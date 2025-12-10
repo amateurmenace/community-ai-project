@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Mission | The Community AI Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, #052e16 0%, #0a3d1f 100%);
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            color: white;
+        }
+        .page-hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .page-hero .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #d1fae5;
+        }
+        .content-section {
+            padding: 100px 0;
+            background: var(--bg-white);
+        }
+        .content-section:nth-child(even) {
+            background: var(--bg-cream);
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+        .content-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+        }
+        .content-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .quote-card {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border: 2px solid var(--code-text-purple);
+            border-radius: 16px;
+            padding: 40px;
+            position: relative;
+        }
+        .quote-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 5rem;
+            color: var(--code-text-purple);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        .quote-card blockquote {
+            font-size: 1.2rem;
+            font-style: italic;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        .quote-card cite {
+            display: block;
+            font-style: normal;
+            font-weight: 700;
+            color: var(--code-text-purple);
+        }
+        .phase-timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+        .phase-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent-lime) 0%, var(--primary-green) 100%);
+        }
+        .phase-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .phase-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 30px;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-lime);
+            border: 3px solid var(--primary-green);
+            border-radius: 50%;
+        }
+        .phase-item.current::before {
+            background: var(--primary-green);
+            box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.4);
+        }
+        .phase-item.future {
+            opacity: 0.7;
+        }
+        .phase-item.future::before {
+            background: #e2e8f0;
+        }
+        .phase-label {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--accent-lime);
+            color: var(--primary-green);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 50px;
+            margin-bottom: 10px;
+        }
+        .phase-item.current .phase-label {
+            background: var(--primary-green);
+            color: white;
+        }
+        .phase-item.future .phase-label {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+        .climate-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid var(--accent-lime);
+            border-radius: 16px;
+            padding: 40px;
+            margin-top: 40px;
+        }
+        .climate-box h3 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: var(--primary-green);
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+        }
+        .stat-box .number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary-green);
+        }
+        .stat-box .label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-lime);
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 30px;
+            transition: gap 0.2s;
+        }
+        .back-link:hover {
+            gap: 15px;
+        }
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .principle-card {
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-lime);
+        }
+        .principle-card h4 {
+            margin-bottom: 10px;
+            color: var(--primary-green);
+        }
+        @media (max-width: 900px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .page-hero h1 {
+                font-size: 2.5rem;
+            }
+            .stat-grid, .principles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility Toolbar -->
+    <button id="a11y-toggle" class="a11y-toggle-btn" onclick="toggleA11yPanel()" aria-label="Accessibility Tools">
+        <i data-lucide="settings-2" width="20"></i>
+        <span>Accessibility</span>
+    </button>
+    
+    <div id="a11y-panel" class="a11y-panel">
+        <div class="a11y-header">
+            <h3><i data-lucide="accessibility" width="20"></i> Accessibility Tools</h3>
+            <button onclick="toggleA11yPanel()" class="a11y-close" aria-label="Close">
+                <i data-lucide="x" width="18"></i>
+            </button>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="languages" width="16"></i> Language / Translation</h4>
+            <div class="a11y-buttons">
+                <button onclick="setLanguage('en')" class="a11y-btn active" data-lang="en">English</button>
+                <button onclick="setLanguage('simple')" class="a11y-btn" data-lang="simple">Simple English</button>
+                <button onclick="setLanguage('es')" class="a11y-btn" data-lang="es">Español</button>
+                <button onclick="setLanguage('zh')" class="a11y-btn" data-lang="zh">中文</button>
+                <button onclick="setLanguage('pt')" class="a11y-btn" data-lang="pt">Português</button>
+                <button onclick="setLanguage('ht')" class="a11y-btn" data-lang="ht">Kreyòl</button>
+                <button onclick="setLanguage('vi')" class="a11y-btn" data-lang="vi">Tiếng Việt</button>
+                <button onclick="setLanguage('ru')" class="a11y-btn" data-lang="ru">Русский</button>
+            </div>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="type" width="16"></i> Text & Reading</h4>
+            <div class="a11y-row">
+                <span>Text Size</span>
+                <div class="a11y-size-controls">
+                    <button onclick="adjustTextSize(-2)" class="a11y-size-btn">A-</button>
+                    <button onclick="resetTextSize()" class="a11y-size-btn">Reset</button>
+                    <button onclick="adjustTextSize(2)" class="a11y-size-btn">A+</button>
+                </div>
+            </div>
+            <div class="a11y-row">
+                <span>Line Spacing</span>
+                <div class="a11y-size-controls">
+                    <button onclick="adjustLineHeight(-0.2)" class="a11y-size-btn">-</button>
+                    <button onclick="resetLineHeight()" class="a11y-size-btn">Reset</button>
+                    <button onclick="adjustLineHeight(0.2)" class="a11y-size-btn">+</button>
+                </div>
+            </div>
+            <div class="a11y-buttons">
+                <button onclick="toggleDyslexicFont()" class="a11y-btn" id="dyslexic-toggle">Dyslexia-Friendly Font</button>
+                <button onclick="toggleHighContrast()" class="a11y-btn" id="contrast-toggle">High Contrast</button>
+            </div>
+        </div>
+        
+        <div class="a11y-section">
+            <h4><i data-lucide="focus" width="16"></i> Focus & Motion</h4>
+            <div class="a11y-buttons">
+                <button onclick="toggleReducedMotion()" class="a11y-btn" id="motion-toggle">Reduce Motion</button>
+                <button onclick="toggleFocusHighlight()" class="a11y-btn" id="focus-toggle">Enhanced Focus</button>
+            </div>
+        </div>
+        
+        <div class="a11y-footer">
+            <button onclick="resetAllA11y()" class="a11y-reset-btn">
+                <i data-lucide="rotate-ccw" width="14"></i> Reset All Settings
+            </button>
+        </div>
+    </div>
+
+    <div class="page-hero">
+        <div class="container">
+            <a href="index.html" class="back-link">
+                <i data-lucide="arrow-left" width="20"></i> Back to Home
+            </a>
+            <h1>Our Mission</h1>
+            <p class="subtitle">Building AI tools rooted in community, guided by democratic ideals, and committed to climate justice.</p>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="content-grid">
+                <div class="content-text">
+                    <h2>Creative Democracy</h2>
+                    <p>Our mission draws inspiration from John Dewey's 1939 essay "Creative Democracy: The Task Before Us," where he argued that democracy is not merely a form of government but a way of life—one that requires continuous creative effort from all citizens.</p>
+                    <p>Dewey wrote that democracy is built on "faith in human nature, faith in human beings, and faith in working with others." This faith must be renewed through action, not merely inherited through institutions.</p>
+                    <p>The Community AI Project embodies this vision. We believe technology should be a tool for democratic participation, not a replacement for it. Our AI tools exist to amplify human connection and civic action, making it easier for neighbors to engage with their government and each other.</p>
+                    <p>As Dewey concluded: "The task of democracy is forever that of creation of a freer and more humane experience in which all share and to which all contribute."</p>
+                </div>
+                <div class="quote-card">
+                    <blockquote>
+                        "Democracy as compared with other ways of life is the sole way of living which believes wholeheartedly in the process of experience as end and as means."
+                    </blockquote>
+                    <cite>— John Dewey, "Creative Democracy: The Task Before Us" (1939)</cite>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="content-grid" style="direction: rtl;">
+                <div class="content-text" style="direction: ltr;">
+                    <h2>Building New Tools</h2>
+                    <p>Audre Lorde's insight that "the master's tools will never dismantle the master's house" resonates deeply with our approach to civic technology. We cannot build equitable, community-serving tools using the same extractive, centralized models that Big Tech employs.</p>
+                    <p>Lorde taught us that true community is not created by erasing difference, but by treating difference as strength. Our tools are designed to serve diverse communities—across languages, abilities, and circumstances—not to homogenize them into a single user profile.</p>
+                    <p>We reject the surveillance capitalism model where user data is the product. Instead, we build tools where communities own their data, where privacy is the default, and where the benefits flow to neighbors, not shareholders.</p>
+                    <p>This requires building new tools—open source, locally-run, community-governed infrastructure that serves the public good rather than private profit.</p>
+                </div>
+                <div class="quote-card" style="direction: ltr; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-color: #d97706;">
+                    <blockquote style="color: #92400e;">
+                        "For the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change."
+                    </blockquote>
+                    <cite style="color: #d97706;">— Audre Lorde, "The Master's Tools Will Never Dismantle the Master's House" (1979)</cite>
+                </div>
+            </div>
+            
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <h4>Interdependence Over Independence</h4>
+                    <p>We build tools that strengthen connections between neighbors, recognizing that our liberation is bound together.</p>
+                </div>
+                <div class="principle-card">
+                    <h4>Difference as Strength</h4>
+                    <p>Our tools serve diverse communities with diverse needs—accessibility, language, and context matter.</p>
+                </div>
+                <div class="principle-card">
+                    <h4>Community Ownership</h4>
+                    <p>Data and infrastructure belong to the communities they serve, not to distant corporations.</p>
+                </div>
+                <div class="principle-card">
+                    <h4>Transparency as Trust</h4>
+                    <p>Open source code means anyone can audit, modify, and improve our tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 50px;">Our Development Phases</h2>
+            
+            <div class="content-grid">
+                <div class="phase-timeline">
+                    <div class="phase-item">
+                        <span class="phase-label">Phase 1 - Complete</span>
+                        <h3>Foundation with Frontier Models</h3>
+                        <p>We began by leveraging existing AI APIs (GPT, Claude, Gemini) to rapidly prototype and validate our concepts. This allowed us to focus on understanding community needs without building infrastructure from scratch.</p>
+                    </div>
+                    <div class="phase-item current">
+                        <span class="phase-label">Phase 2 - Current</span>
+                        <h3>Hybrid Approach</h3>
+                        <p>We're currently operating in a hybrid mode: using frontier models where necessary while actively migrating functionality to open-source alternatives. Our tools are being refactored to support multiple backends.</p>
+                    </div>
+                    <div class="phase-item future">
+                        <span class="phase-label">Phase 3 - In Progress</span>
+                        <h3>Local LLM Integration</h3>
+                        <p>We're testing local deployment of models like Llama, Mistral, and Phi on community hardware. The goal is to run AI that doesn't phone home to corporate servers.</p>
+                    </div>
+                    <div class="phase-item future">
+                        <span class="phase-label">Phase 4 - Future</span>
+                        <h3>Community-Owned AI</h3>
+                        <p>Our long-term vision: AI models trained on local data, running on local hardware, governed by local communities. True digital sovereignty.</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="climate-box">
+                        <h3>
+                            <i data-lucide="leaf" width="28"></i>
+                            Climate Justice in AI
+                        </h3>
+                        <p>The environmental cost of AI is staggering. Training a single large language model can emit as much carbon as five cars over their lifetimes. Every query to a frontier model consumes energy at data centers around the world.</p>
+                        <p>Our commitment to local LLMs isn't just about privacy—it's about climate justice. Smaller, locally-run models consume a fraction of the energy of frontier models. By transitioning to local AI, we're working toward a more sustainable future for civic technology.</p>
+                        
+                        <div class="stat-grid">
+                            <div class="stat-box">
+                                <div class="number">10x</div>
+                                <div class="label">Less energy with local LLMs</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">0</div>
+                                <div class="label">Data sent to external servers</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">100%</div>
+                                <div class="label">Community-controlled</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 25px; background: #fef2f2; border: 2px solid #fecaca; border-radius: 12px;">
+                        <h4 style="color: #dc2626; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                            <i data-lucide="alert-triangle" width="20"></i>
+                            The Problem with Frontier Models
+                        </h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #991b1b;">
+                            <li>Massive carbon footprint from training and inference</li>
+                            <li>Data processed on distant corporate servers</li>
+                            <li>No community control over model behavior</li>
+                            <li>Costs scale with usage, limiting accessibility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="text-align: center; background: var(--primary-green); color: white;">
+        <div class="container">
+            <h2 style="color: white;">Join the Mission</h2>
+            <p style="max-width: 600px; margin: 0 auto 30px; color: #d1fae5;">The task of creative democracy is never finished. Every generation must renew the commitment. We invite you to build with us.</p>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="index.html#apps" class="nav-btn" style="background: white; color: var(--primary-green);">
+                    <i data-lucide="wrench" width="18"></i> Explore Our Tools
+                </a>
+                <a href="morals.html" class="nav-btn" style="background: transparent; border-color: white; color: white;">
+                    <i data-lucide="heart" width="18"></i> Read Our Values
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="modern-footer">
+        <div class="container">
+            <div class="footer-bottom" style="flex-direction: column; gap: 20px; text-align: center; border-top: none; padding-top: 0;">
+                <div class="footer-logo-container">
+                    <img src="secondary.png" alt="Brookline Interactive Group" class="footer-logo">
+                </div>
+                <div style="font-size: 0.9rem; color: #64748b;">
+                    A community AI project from <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Brookline Interactive Group</a>
+                </div>
+                <a href="index.html" class="nav-btn" style="margin-top: 10px;">
+                    <i data-lucide="home" width="16"></i> Return Home
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="a11y.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
