@@ -61,7 +61,7 @@ p { font-weight: 500; opacity: 0.9; margin-bottom: 1.5rem; max-width: 70ch; }
 .container { max-width: var(--container-width); margin: 0 auto; padding: 0 30px; position: relative; z-index: 2; }
 .section { padding: var(--section-padding) 0; position: relative; }
 .text-center { text-align: center; display: flex; flex-direction: column; align-items: center; }
-.reveal-content { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.reveal-content { opacity: 1; transform: translateY(0); transition: all 0.8s ease; }
 .reveal-content.visible { opacity: 1; transform: translateY(0); }
 
 /* --- HERO --- */
