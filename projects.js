@@ -11,6 +11,38 @@
 
 const projectsData = [
     {
+        id: "neighborhood-ai",
+        category: "agents",
+        badge: ["Local LLM", " Newest!"],
+       
+        icon: "message-square-share",
+        title: "Neighborhood AI",
+        description: "An app for fine tuning + launching constitutional local AI models for communities.",
+        techStack: ["RAG", "LLM", "Vector DB", "Ollama"],
+        links: { open: "https://neighborhood-ai.netlify.app" }
+    },
+    {
+        id: "artificial",
+        category: "agents",
+        badge: "Experimental",
+        icon: "brain-circuit",
+        title: "Artificial: the Game of AI",
+        description: "A three-part game for learning, practicing, and critiquing AI.",
+        techStack: ["AI Agents", "Simulation"],
+        links: { open: "https://artificial.weirdmachine.org/" }
+    },
+     {
+        id: "civic-agent",
+        category: "agents",
+        badge: "Beta",
+        featured: true,
+        icon: "bot-message-square",
+        title: "Commit: the Community AI Agent for Brookline, MA",
+        description: "An experimental agental AI chatbot that helps you take real-world actions in your community.",
+        techStack: ["AI Agent", "LangChain", "GCP"],
+        links: { open: "https://commit-ai-civic-agent-390658405112.us-west1.run.app/" }
+    },
+    {
         id: "highlighter",
         category: "meetings",
         badge: "Live",
@@ -28,12 +60,12 @@ const projectsData = [
         title: "Community Captioner",
         description: "Free browser-based tool to generate real-time open captions for OBS live streams without expensive hardware.",
         techStack: ["JS", "WebSpeech API", "OBS"],
-        links: { open: "https://community-captioner.netlify.app/" }
+        links: { open: "https://caption.weirdmachine.org/" }
     },
     {
         id: "documenter",
         category: "docs",
-        badge: "New",
+        badge: "Anti-Bureaucracy",
         icon: "file-search",
         title: "Civic Documenter",
         description: "Turn messy PDF attachments from municipal agendas into structured, readable data using AI parsing.",
@@ -49,26 +81,5 @@ const projectsData = [
         description: "Instantly translate complex civic documents into multiple community languages while preserving formatting.",
         techStack: ["AI Translation", "PDF parsing"],
         links: { open: "https://translator.weirdmachine.org/" }
-    },
-    {
-        id: "civic-agent",
-        category: "agents",
-        badge: "Beta",
-        featured: true,
-        icon: "bot-message-square",
-        title: "Commit: the Community AI Agent for Brookline, MA",
-        description: "An experimental agental AI chatbot that helps you take real-world actions in your community.",
-        techStack: ["AI Agent", "LangChain", "GCP"],
-        links: { open: "https://commit-ai-civic-agent-390658405112.us-west1.run.app/" }
-    },
-    {
-        id: "artificial",
-        category: "agents",
-        badge: "Experimental",
-        icon: "brain-circuit",
-        title: "Artificial: the Game of AI",
-        description: "A three-part game for learning, practicing, and critiquing AI.",
-        techStack: ["AI Agents", "Simulation"],
-        links: { open: "https://artificial.weirdmachine.org/" }
     }
 ];
