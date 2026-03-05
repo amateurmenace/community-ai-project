@@ -1,6 +1,9 @@
 # API Keys - NEVER commit these
 config.js
 
+# Claude Code
+CLAUDE.md
+
 # Dependencies
 node_modules/
 

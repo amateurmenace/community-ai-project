@@ -393,13 +393,13 @@
                 <div class="hero-columns reveal-content">
                     <div class="hero-col">
                         <p class="hero-explainer">
-                            We are a coalition of neighbors, designers, media makers, and urban mechanics. Our project builds open-source digital infrastructure that allows communities to govern their own data, use AI for public good, and reclaim the future of their communities from big tech monopolies. 
+                            We are a coalition of neighbors, designers, media makers, and urban mechanics. Our project builds open-source digital infrastructure that allows communities to govern their own data, use AI for public good, and reclaim the future of their communities from big tech monopolies.
                         </p>
                     </div>
                     <div class="hero-col">
-                        <p class="hero-explainer">
-                            We believe true freedom is not just escaping or avoiding oppression - it is building a world without it. This site has some of our early attempts at building things for a more caring, accessible, and creative democracy. This is just one beginning. There are so many more.
-                        </p>
+                        <div class="hero-video">
+                            <iframe src="https://www.youtube.com/embed/trDndI41cpk" title="Community AI Project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; aspect-ratio:16/9; border-radius:8px;"></iframe>
+                        </div>
                     </div>
                 </div>
 
@@ -812,16 +812,12 @@
         let previousNames = ["The Community AI Project"];
 
         // --- HYBRID API CALLER ---
-        async function callGemini(payload) {
-            // DETECT LOCALHOST
+        async function callGemini(payload, model = 'gemini-3-flash-preview') {
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
 
-            // Model to use (use a stable model name)
-            const MODEL = 'gemini-2.0-flash';
-
-            // 1. Local Dev Mode (Prioritize local config)
+            // 1. Local Dev Mode
             if (window.CONFIG && window.CONFIG.API_KEY) {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${window.CONFIG.API_KEY}`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${window.CONFIG.API_KEY}`;
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -833,8 +829,8 @@
                     throw new Error(errData.error?.message || 'API request failed');
                 }
                 return response;
-            } 
-            // 2. Netlify Prod Mode (or missing local config)
+            }
+            // 2. Netlify Prod Mode
             else {
                 if (isLocal) {
                     appendCode('AI', 'Error: Running locally but config.js not found. Create config.js with: window.CONFIG = { API_KEY: "your-key" }');
@@ -843,7 +839,7 @@
                 const response = await fetch('/.netlify/functions/gemini', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ ...payload, model })
                 });
                 if (!response.ok) {
                     const errData = await response.json().catch(() => ({}));
@@ -887,11 +883,11 @@
         function showPaths() { document.getElementById('fork-container').classList.add('active'); }
         function openDeconstruct() { document.getElementById('deconstruct-panel').style.display = 'block'; document.getElementById('construct-panel').style.display = 'none'; }
         
-        function openConstruct() { 
-            document.getElementById('construct-panel').style.display = 'grid'; 
+        function openConstruct() {
+            document.getElementById('construct-panel').style.display = 'grid';
             document.getElementById('deconstruct-panel').style.display = 'none';
-            appendCode('AI', '<em>"True freedom is not just escaping oppression - it is building a world without it."</em>', false);
-            appendCode('AI', 'Let\'s build something together. Start by telling me about a community problem you\'d like to solve.', true);
+            appendCode('AI', '/* VIBE CODER INITIALIZED */', false);
+            appendCode('AI', 'Ready to build. Describe an app idea — or hit "Inspire Me" and I\'ll dream one up.', true);
         }
 
         function updateVar(name, val) { document.documentElement.style.setProperty(name, val); }
@@ -928,12 +924,13 @@
                 4. Output ONLY the name. No quotes.
             `;
             try {
-                const resp = await callGemini({ 
+                const resp = await callGemini({
                     contents: [{ parts: [{ text: promptText }] }],
-                    generationConfig: { 
-                        candidateCount: 1, 
-                        maxOutputTokens: 30,
-                        temperature: 1.3 // High temperature forces high creativity/randomness
+                    generationConfig: {
+                        candidateCount: 1,
+                        maxOutputTokens: 256,
+                        temperature: 1.3,
+                        thinkingConfig: { thinkingBudget: 0 }
                     }
                 });
                 
@@ -963,12 +960,27 @@
         let isAppBuilt = false;
         let lastBuildSummary = "";
 
-        const SYSTEM_INSTRUCTION = `You are Vibe Coder, a civic-minded creative technologist. 
-        GOAL: Help the user build a creative, clever, and non-traditional web tool for their community.
-        CRITICAL: Keep your responses SHORT and CONCISE (max 2 sentences). Include line breaks (newlines) between ideas to make text readable.
-        PHASE 1 (Discovery): When the user proposes an idea, ask 3-4 distinct clarifying questions (one by one) to refine the target audience, data needs, and "vibe" (visual style). Suggest using AI where relevant.
-        PHASE 2 (Build): Once you have enough info, output the token [BUILD] followed by a detailed summary of the requirements. The app design should be modern, possibly brutalist or playful, and not boring corporate style.
-        PHASE 3 (Refine): If the user asks for changes AFTER the build, output [BUILD] again with the updated full summary including the new changes.`;
+        const SYSTEM_INSTRUCTION = `You are "Vibe Coder" — a Creative Technologist and playful AI builder.
+
+Your mission: Help users build visually stunning, single-file HTML web apps.
+
+PERSONALITY: Bold, playful, encouraging. You're a creative partner, not a boring assistant. Use short responses (1-2 sentences max). Get excited about ideas.
+
+WORKFLOW:
+1. When the user describes an idea, ask 1-2 quick clarifying questions about audience and visual vibe. Keep it snappy.
+2. Once you have enough context (usually after 1-2 exchanges), BUILD IT. Output a complete, working HTML app inside a \`\`\`html code block.
+3. After building, accept refinement requests. Output the full updated code in a new \`\`\`html block.
+
+CODE REQUIREMENTS:
+- Single HTML file with embedded CSS and JS
+- Use TailwindCSS via CDN (include the tailwindcss script tag in the head)
+- Creative, modern design — brutalist, playful, bold, experimental. NEVER boring corporate.
+- Must be functional and interactive with real working features
+- Include smooth animations, transitions, and micro-interactions
+- Mobile responsive
+- Use interesting color palettes and typography (Google Fonts via CDN OK)
+
+IMPORTANT: When outputting code, wrap it in a \`\`\`html block. The code must start with <!DOCTYPE html> and be a complete, self-contained page.`;
 
         function handleInput(e) {
             if(e.key === 'Enter') submitChat();
@@ -1037,11 +1049,17 @@
             const input = document.getElementById('user-input');
             input.value = "Generating idea...";
             try {
-                const resp = await callGemini({ contents: [{ parts: [{ text: "Give me a short, 1-sentence idea for a creative, slightly weird, but useful community app." }] }] });
+                const resp = await callGemini({
+                    contents: [{ parts: [{ text: "Give me a single, short, 1-sentence idea for a creative, bold, slightly weird but genuinely useful community web app. Think: playful civic tech, neighborhood tools, local culture experiments. Be specific and imaginative. Output ONLY the idea, no quotes." }] }],
+                    generationConfig: {
+                        maxOutputTokens: 200,
+                        thinkingConfig: { thinkingBudget: 0 }
+                    }
+                });
                 const data = await resp.json();
-                input.value = data.candidates[0].content.parts[0].text.replace(/"/g, "");
+                input.value = data.candidates[0].content.parts[0].text.replace(/"/g, "").trim();
                 input.focus();
-            } catch(e) { input.value = "A hyper-local social network for street cats."; }
+            } catch(e) { input.value = "A neighborhood noise map where residents log sounds and discover their block's acoustic personality."; }
         }
 
         // --- MODAL & IMAGE GEN ---
@@ -1058,29 +1076,36 @@
         async function runImageGen() {
             const promptStr = document.getElementById('img-prompt').value;
             if(!promptStr) return;
-            
+
             const preview = document.getElementById('img-preview-area');
             const btn = document.getElementById('btn-run-img');
             const actions = document.getElementById('modal-actions');
-            
+
             btn.innerText = "Generating...";
             btn.disabled = true;
             preview.innerHTML = `<div class="toast-spinner" style="border-color:#ccc; border-top-color:#059669; width:40px; height:40px;"></div>`;
-            
+
             try {
-                 const resp = await callGemini({ contents: [{ parts: [{ text: `Generate an SVG code string for: ${promptStr}. Return ONLY the <svg> code. Make it colorful. Do not use Markdown.` }] }] });
+                const resp = await callGemini({ contents: [{ parts: [{ text: `Generate a high-quality SVG illustration for: ${promptStr}.
+
+Rules:
+- Return ONLY the raw <svg>...</svg> code. No markdown, no explanation.
+- Use a viewBox (e.g. viewBox="0 0 200 200") so it scales well.
+- Make it visually rich: use gradients, interesting shapes, and a vibrant color palette.
+- Style: modern, bold, slightly playful. Think editorial illustration meets pixel art.
+- Keep it under 5KB if possible.` }] }] });
                 const data = await resp.json();
                 let svg = data.candidates[0].content.parts[0].text;
-                svg = svg.replace(/```svg/g, "").replace(/```html/g, "").replace(/```/g, "");
-                
+                svg = svg.replace(/```svg/gi, "").replace(/```xml/gi, "").replace(/```html/gi, "").replace(/```/g, "").trim();
+
                 lastGeneratedSVG = svg;
                 preview.innerHTML = svg;
                 btn.innerText = "Generate Another";
                 btn.disabled = false;
                 actions.classList.add('active');
 
-            } catch(e) { 
-                preview.innerHTML = "<span style='color:red'>Generation failed.</span>";
+            } catch(e) {
+                preview.innerHTML = "<span style='color:red'>Generation failed. Try again.</span>";
                 btn.innerText = "Try Again";
                 btn.disabled = false;
             }
@@ -1098,47 +1123,63 @@
         function useImageInApp() {
             if(!lastGeneratedSVG) return;
             closeImageModal();
-            chatHistory.push({ role: "user", parts: [{ text: `I have generated this SVG asset. Please incorporate it into the app design:\n${lastGeneratedSVG}` }] });
-            appendCode('USER', `[Asset Injected] Please use the generated image in the app.`);
+            chatHistory.push({ role: "user", parts: [{ text: `I generated this SVG asset. Incorporate it into the current app as an inline SVG element. Output the full updated HTML in a \`\`\`html block:\n${lastGeneratedSVG}` }] });
+            appendCode('USER', `[Asset Injected] Embedding generated image into app...`);
             processVibeCoder();
         }
 
         async function processVibeCoder() {
             startThinking();
 
-            let currentInstructions = SYSTEM_INSTRUCTION;
-            if(isAppBuilt) {
-                currentInstructions += ` The app is currently built based on this summary: "${lastBuildSummary}". The user wants to modify it. Output [BUILD] with the full updated summary.`;
-            }
-
             try {
                 const resp = await callGemini({
                     contents: chatHistory,
-                    systemInstruction: { parts: [{ text: currentInstructions }] }
+                    systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] }
                 });
                 const data = await resp.json();
                 const aiText = data.candidates[0].content.parts[0].text;
-                
+
                 stopThinking();
                 chatHistory.push({ role: "model", parts: [{ text: aiText }] });
 
-                if(aiText.includes("[BUILD]")) {
+                // Check for ```html code blocks in the response
+                const codeMatch = aiText.match(/```html([\s\S]*?)```/);
+
+                if (codeMatch && codeMatch[1]) {
+                    const code = codeMatch[1].trim();
                     isAppBuilt = true;
-                    const summary = aiText.split("[BUILD]")[1];
-                    lastBuildSummary = summary;
-                    
-                    appendCode('AI', 'Estimated build time: 1-2 minutes. Stay tuned!', true);
-                    
+                    lastBuildSummary = aiText;
+
+                    // Show chat text (without the code block)
+                    const chatText = aiText.replace(codeMatch[0], '').trim();
+                    if (chatText) appendCode('AI', chatText, true);
+
+                    // Show toast & build animation
                     const toast = document.getElementById('toast-notification');
                     toast.classList.add('active');
                     toast.classList.remove('done');
                     document.getElementById('toast-msg').innerText = "Cooking App...";
                     lucide.createIcons();
 
-                    simulateBuildLogs(); 
-                    buildApp(summary); 
+                    simulateBuildLogs();
+
+                    // Short delay for build animation, then deploy
+                    setTimeout(() => {
+                        clearInterval(buildInterval);
+                        document.getElementById('app-preview').srcdoc = code;
+
+                        appendCode('AI', 'App deployed to preview. Refine it or export.', true);
+                        document.getElementById('export-btn').style.display = 'flex';
+                        document.getElementById('save-btn').style.display = 'flex';
+
+                        toast.classList.add('done');
+                        document.getElementById('toast-msg').innerText = "App Cooked!";
+                        lucide.createIcons();
+
+                        try { document.getElementById('kitchen-timer-sound').play().catch(() => {}); } catch(e) {}
+                    }, 3000);
                 } else {
-                    appendCode('AI', aiText, true); 
+                    appendCode('AI', aiText, true);
                 }
 
             } catch(e) { stopThinking(); console.error(e); appendCode('AI', 'Connection failed.'); }
@@ -1168,36 +1209,7 @@
             }, 800);
         }
 
-        async function buildApp(requirements) {
-            const buildPrompt = `Create a complete, single-file HTML/JS/CSS application based on this summary: ${requirements}. 
-            Constraints: 
-            1. Use TailwindCSS via CDN. 
-            2. Design must be CREATIVE. 
-            3. Return ONLY raw HTML code starting with <!DOCTYPE html>.
-            4. Do not wrap in markdown.`;
-            
-            try {
-                const resp = await callGemini({ contents: [{ role: "user", parts: [{ text: buildPrompt }] }] });
-                const data = await resp.json();
-                let code = data.candidates[0].content.parts[0].text;
-                code = code.replace(/```html/g, "").replace(/```/g, "");
-                
-                clearInterval(buildInterval); 
-                document.getElementById('app-preview').srcdoc = code;
-                appendCode('AI', 'App construction complete. You can now refine it or download it.', true);
-                
-                document.getElementById('export-btn').style.display = 'flex';
-                document.getElementById('save-btn').style.display = 'flex';
-                
-                const toast = document.getElementById('toast-notification');
-                toast.classList.add('done');
-                document.getElementById('toast-msg').innerText = "App Cooked!";
-                lucide.createIcons();
-                
-                document.getElementById('kitchen-timer-sound').play().catch(e => console.log("Audio blocked"));
-
-            } catch(e) { console.error(e); }
-        }
+        // buildApp removed — AI now outputs code directly in ```html blocks
 
         function exportZip() {
             const code = document.getElementById('app-preview').srcdoc;

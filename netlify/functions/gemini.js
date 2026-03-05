@@ -44,10 +44,11 @@ exports.handler = async (event, context) => {
   try {
     // Parse the incoming request body
     const payload = JSON.parse(event.body || "{}");
-    
-    // Use the model from the request or default to gemini-2.0-flash
-    const MODEL = "gemini-2.0-flash";
-    
+
+    // Extract model from payload (frontend can specify), default to gemini-3-flash-preview
+    const MODEL = payload.model || "gemini-3-flash-preview";
+    delete payload.model; // Don't forward to Gemini API
+
     // Build the Gemini API URL
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
     

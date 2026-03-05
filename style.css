@@ -116,6 +116,7 @@ p { font-weight: 500; opacity: 0.9; margin-bottom: 1.5rem; max-width: 70ch; }
     position: relative;
     z-index: 2;
     text-align: left;
+    align-items: center;
 }
 .hero-col {
     position: relative;
