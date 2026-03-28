@@ -25,21 +25,21 @@ const projectsData = [
         id: "artificial",
         category: "agents",
         badge: "Experimental",
-        featured: true,
         icon: "brain-circuit",
         title: "Artificial: the Game of AI",
         description: "A three-part game for learning, practicing, and critiquing AI.",
-        techStack: ["AI Agents", "Simulation"],
+        techStack: ["AI Literacy", "Simulation", "Game",],
         links: { open: "https://artificial.weirdmachine.org/" }
     },
      {
         id: "civic-agent",
         category: "agents",
         badge: "Beta",
+        featured: true,
         icon: "bot-message-square",
-        title: "Commit: the Community AI Agent for Brookline, MA",
-        description: "An experimental agental AI chatbot that helps you take real-world actions in your community.",
-        techStack: ["AI Agent", "LangChain", "GCP"],
+        title: "Commit: a localized AI Agent for cities + towns",
+        description: "An experimental agental AI chatbot and get-things-done tool that helps you take real-world actions in your community.",
+        techStack: ["AI Agent", "Local LLM", "Vibe Coding"],
         links: { open: "https://commit-ai-civic-agent-390658405112.us-west1.run.app/" }
     },
     {
@@ -49,7 +49,7 @@ const projectsData = [
         icon: "video", 
         title: "Community Highlighter",
         description: "Paste a YouTube URL of a public meeting and get a searchable, speaker-diarized transcript synced to the video.",
-        techStack: ["Python", "Whisper", "React"],
+        techStack: ["Python", "FFMPEG", "React"],
         links: { open: "https://community-highlighter.onrender.com/" }
     },
     {
@@ -59,7 +59,7 @@ const projectsData = [
         icon: "subtitles",
         title: "Community Captioner",
         description: "Free browser-based tool to generate real-time open captions for OBS live streams without expensive hardware.",
-        techStack: ["JS", "WebSpeech API", "OBS"],
+        techStack: ["Whisper", "WebSpeech API", "OBS"],
         links: { open: "https://caption.weirdmachine.org/" }
     },
     {
