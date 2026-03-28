@@ -14,7 +14,7 @@ const projectsData = [
         id: "neighborhood-ai",
         category: "agents",
         badge: ["Local LLM", " Newest!"],
-       
+
         icon: "message-square-share",
         title: "Neighborhood AI",
         description: "An app for fine tuning + launching constitutional local AI models for communities.",
@@ -81,5 +81,15 @@ const projectsData = [
         description: "Instantly translate complex civic documents into multiple community languages while preserving formatting.",
         techStack: ["AI Translation", "PDF parsing"],
         links: { open: "https://translator.weirdmachine.org/" }
+    },
+    {
+        id: "anti-ai",
+        category: "agents",
+        badge: "Realism Exposure Therapy",
+        icon: "file-search",
+        title: "Anti-AI",
+        description: "A tool for critiquing and counteracting the negative impacts of AI in civic contexts.",
+        techStack: ["AI Literacy", "Critical Thinking", "Community Engagement"],
+        links: { open: "https://anti-ai-89463051012.us-west1.run.app/" }
     }
 ];
