@@ -1,0 +1,368 @@
+/* ==========================================================================
+   Civic UI — Community AI Project design system
+   Brutalist-solarpunk civic tech. Tokens + component classes.
+   Ported faithfully from the marketing site's style.css.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* Palette */
+  --bg-cream: #FDF9F0;
+  --bg-white: #FFFFFF;
+  --primary-green: #052e16;
+  --button-green: #1a4a35;
+  --accent-lime: #4ade80;
+  --accent-emerald: #34d399;
+
+  --code-bg-purple: #f5f3ff;
+  --code-text-purple: #5b21b6;
+
+  --sky-bg: #f0f9ff;
+  --sky-border: #bae6fd;
+  --sky-text: #0284c7;
+
+  /* Dark IDE / terminal surface */
+  --ide-bg: #111827;
+  --ide-sidebar: #1f2937;
+  --ide-text: #e5e7eb;
+  --ide-accent: #34d399;
+
+  /* Typography */
+  --font-heading: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Geometry */
+  --border-radius: 12px;
+  --border-width: 2px;
+
+  /* Signature brutalist offset shadows */
+  --cui-shadow: 8px 8px 0 rgba(5, 46, 22, 0.10);
+  --cui-shadow-hover: 12px 12px 0 var(--accent-lime);
+  --cui-shadow-hard: 15px 15px 0 rgba(5, 46, 22, 0.15);
+  --cui-shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Optional root wrapper — sets the baseline font + color for a design surface.
+   Tokens live in :root, so components are styled even without it; use it to
+   establish the cream canvas and body type. */
+.cui-root {
+  font-family: var(--font-body);
+  color: var(--primary-green);
+  background: var(--bg-cream);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Button
+   ========================================================================== */
+.cui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: var(--border-width) solid var(--primary-green);
+  border-radius: 50px;
+  background: var(--bg-white);
+  color: var(--primary-green);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.1s ease;
+}
+.cui-btn--sm { padding: 10px 20px; font-size: 0.9rem; }
+.cui-btn--md { padding: 16px 32px; font-size: 1rem; }
+.cui-btn--lg { padding: 24px 48px; font-size: 1.25rem; letter-spacing: 0.02em; }
+
+/* variants */
+.cui-btn--primary { background: var(--primary-green); color: #fff; }
+.cui-btn--primary:hover { background: var(--button-green); transform: translateY(-4px); }
+
+.cui-btn--secondary { background: var(--bg-white); color: var(--primary-green); }
+.cui-btn--secondary:hover { background: var(--primary-green); color: #fff; transform: translateY(-4px); }
+
+.cui-btn--special { background: var(--button-green); color: #fff; }
+.cui-btn--special:hover { background: var(--primary-green); transform: translateY(-4px); }
+
+.cui-btn--ghost {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: var(--ide-accent);
+  color: var(--ide-accent);
+  font-family: var(--font-mono);
+}
+.cui-btn--ghost:hover { background: rgba(52, 211, 153, 0.22); }
+
+.cui-btn--brutal {
+  border-radius: 0;
+  font-weight: 900;
+  box-shadow: 6px 6px 0 var(--primary-green);
+}
+.cui-btn--brutal:active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--primary-green); }
+
+/* modifiers */
+.cui-btn--square { border-radius: var(--border-radius); }
+.cui-btn--block { width: 100%; }
+.cui-btn--uppercase { text-transform: uppercase; letter-spacing: 0.08em; }
+.cui-btn:disabled,
+.cui-btn[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.cui-btn__icon { display: inline-flex; align-items: center; }
+.cui-btn__icon svg { display: block; width: 1.1em; height: 1.1em; }
+
+/* ==========================================================================
+   Badge
+   ========================================================================== */
+.cui-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  border-radius: 100px;
+  border: 1px solid var(--primary-green);
+}
+.cui-badge--lime { background: var(--accent-lime); color: var(--primary-green); }
+.cui-badge--sky { background: var(--sky-border); color: #0c4a6e; border-color: var(--sky-text); }
+.cui-badge--purple { background: var(--code-bg-purple); color: var(--code-text-purple); border-color: var(--code-text-purple); }
+.cui-badge--neutral { background: #e2e8f0; color: #334155; border-color: #94a3b8; }
+.cui-badge__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ==========================================================================
+   Tag — mono tech chip
+   ========================================================================== */
+.cui-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+.cui-tag--light { background: var(--bg-white); border: 1px solid var(--primary-green); color: var(--primary-green); }
+.cui-tag--dark { background: rgba(255, 255, 255, 0.1); color: var(--ide-accent); }
+.cui-tag--muted { background: #f1f5f9; color: #475569; }
+
+/* ==========================================================================
+   IconBox — the lime square that frames an icon
+   ========================================================================== */
+.cui-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  border: var(--border-width) solid var(--primary-green);
+  border-radius: var(--border-radius);
+  background: var(--accent-lime);
+  color: var(--primary-green);
+}
+.cui-icon-box--sm { width: 44px; height: 44px; border-radius: 10px; }
+.cui-icon-box--lg { width: 76px; height: 76px; border-radius: 16px; }
+.cui-icon-box--sky { background: var(--sky-border); }
+.cui-icon-box--purple { background: var(--code-bg-purple); color: var(--code-text-purple); }
+.cui-icon-box svg { display: block; width: 50%; height: 50%; }
+
+/* ==========================================================================
+   Card — brutalist surface
+   ========================================================================== */
+.cui-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-white);
+  border: var(--border-width) solid var(--primary-green);
+  border-radius: var(--border-radius);
+  padding: 40px;
+  box-shadow: var(--cui-shadow);
+  font-family: var(--font-body);
+  color: var(--primary-green);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cui-card--interactive { cursor: pointer; }
+.cui-card--interactive:hover { transform: translate(-4px, -4px); box-shadow: var(--cui-shadow-hover); }
+.cui-card--hard { box-shadow: var(--cui-shadow-hard); border-width: 3px; }
+.cui-card--soft { box-shadow: var(--cui-shadow-soft); border-color: var(--sky-border); }
+.cui-card--flat { box-shadow: none; }
+.cui-card--pad-sm { padding: 24px; }
+.cui-card--pad-lg { padding: 56px; }
+
+/* ==========================================================================
+   ProjectCard — compound: icon + badges + title + desc + tags + action
+   ========================================================================== */
+.cui-project-card { gap: 0; }
+.cui-project-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.cui-project-card__badges { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.cui-project-card__title {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 12px;
+  color: var(--primary-green);
+}
+.cui-project-card__desc {
+  font-weight: 500;
+  opacity: 0.9;
+  line-height: 1.6;
+  margin: 0 0 22px;
+}
+.cui-project-card__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.cui-project-card__action { margin-top: auto; }
+
+/* ==========================================================================
+   CodeBlock — purple offset panel
+   ========================================================================== */
+.cui-code {
+  background: var(--code-bg-purple);
+  color: var(--code-text-purple);
+  border: var(--border-width) solid var(--code-text-purple);
+  border-radius: var(--border-radius);
+  box-shadow: 20px 20px 0 rgba(91, 33, 182, 0.1);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  overflow: auto;
+}
+.cui-code__label {
+  display: block;
+  padding: 12px 24px;
+  border-bottom: 1px solid rgba(91, 33, 182, 0.2);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+.cui-code__pre { margin: 0; padding: 28px 32px; white-space: pre; font-family: inherit; }
+
+/* ==========================================================================
+   FeatureItem — lime icon square + heading + body
+   ========================================================================== */
+.cui-feature { display: flex; gap: 24px; align-items: flex-start; font-family: var(--font-body); color: var(--primary-green); }
+.cui-feature__body { flex: 1; }
+.cui-feature__title {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  color: var(--primary-green);
+}
+.cui-feature__text { font-weight: 500; opacity: 0.9; line-height: 1.6; margin: 0; }
+
+/* ==========================================================================
+   ChatBubble
+   ========================================================================== */
+.cui-bubble {
+  width: fit-content;
+  max-width: 80%;
+  padding: 15px 25px;
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.cui-bubble--ai { background: #f1f5f9; color: #334155; border-bottom-left-radius: 4px; }
+.cui-bubble--user { background: #0ea5e9; color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+
+/* ==========================================================================
+   Terminal — dark IDE / CLI surface
+   ========================================================================== */
+.cui-terminal {
+  background: var(--ide-bg);
+  border: var(--border-width) solid var(--primary-green);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  color: var(--ide-accent);
+  font-family: var(--font-mono);
+  overflow: hidden;
+}
+.cui-terminal__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #000;
+  border-bottom: 1px solid #333;
+}
+.cui-terminal__dot { width: 12px; height: 12px; border-radius: 50%; }
+.cui-terminal__dot--r { background: #ef4444; }
+.cui-terminal__dot--y { background: #eab308; }
+.cui-terminal__dot--g { background: #22c55e; }
+.cui-terminal__title { margin-left: 8px; color: #666; font-size: 0.8rem; }
+.cui-terminal__body {
+  padding: 22px 24px;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  color: var(--ide-text);
+}
+.cui-terminal__prompt { color: var(--ide-accent); }
+.cui-terminal__cursor {
+  display: inline-block;
+  width: 9px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--accent-lime);
+}
+
+/* ==========================================================================
+   SectionHeading
+   ========================================================================== */
+.cui-heading { display: flex; flex-direction: column; gap: 14px; font-family: var(--font-body); color: var(--primary-green); }
+.cui-heading--center { align-items: center; text-align: center; }
+.cui-heading__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--button-green);
+}
+.cui-heading__title {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 3.5rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--primary-green);
+}
+.cui-heading__subtitle {
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  max-width: 70ch;
+  margin: 0;
+}
+.cui-heading--gradient .cui-heading__title {
+  background: linear-gradient(135deg, var(--accent-lime) 0%, var(--accent-emerald) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cui-heading--sm .cui-heading__title { font-size: 2.25rem; }

@@ -1,0 +1,10 @@
+{
+  "pkg": "civic-ui",
+  "globalName": "CivicUI",
+  "projectId": "854c6665-a6ef-4403-9486-c2b0155ed5bc",
+  "shape": "package",
+  "buildCmd": "npm run build --prefix design-system",
+  "cssEntry": "dist/styles.css",
+  "docsDir": "docs",
+  "readmeHeader": ".design-sync/conventions.md"
+}
