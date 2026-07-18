@@ -392,8 +392,11 @@
                 
                 <div class="hero-columns reveal-content">
                     <div class="hero-col">
+                        <p class="hero-explainer" style="margin-bottom: 1.2em;">
+                            Making a tool once required permission — a degree, a department, a budget line. AI can collapse the distance between wishing a tool existed and building it: anyone who understands a problem can now build the thing that meets it. Toolmaking, the oldest human craft, becomes available to everyone. But that potential won't bend toward the public good on its own, not while the companies building AI are the only ones deciding what it's for.
+                        </p>
                         <p class="hero-explainer">
-                            We are a coalition of neighbors, designers, media makers, and urban mechanics. Our project builds open-source digital infrastructure that allows communities to govern their own data, use AI for public good, and reclaim the future of their communities from big tech monopolies.
+                            The Community AI Project is a live experiment in taking hold of that power and pointing it at civic life. Open-source, locally-owned tools, deployed in real neighborhoods — so communities can shape their own future rather than rent it from the companies that own the alternative.
                         </p>
                     </div>
                     <div class="hero-col">
@@ -407,6 +410,9 @@
                     <a href="#apps" class="nav-btn">Browse Tools</a>
                     <a href="#values" class="nav-btn">Our Values</a>
                     <a href="#mission" class="nav-btn">Our Mission</a>
+                    <a href="https://drive.google.com/file/d/1YM9YDHAaf03Bp1IK2b6Dfzun6pg0GjDR/view?usp=sharing" target="_blank" rel="noopener" class="nav-btn">
+                        <i data-lucide="file-text" width="18"></i> One-Pager (PDF)
+                    </a>
                     <a href="#ai-playground" class="nav-btn special">
                         <i data-lucide="bot" width="18"></i> Playground
                     </a>
@@ -435,6 +441,7 @@
                     <button class="nav-btn" onclick="renderProjects('docs')">Docs</button>
                     <button class="nav-btn" onclick="renderProjects('agents')">Agents</button>
                     <button class="nav-btn" onclick="renderProjects('accessibility')">Accessibility</button>
+                    <button class="nav-btn" onclick="renderProjects('creative')">Creative</button>
                 </div>
 
                 <div class="app-grid" id="project-container"></div>
@@ -750,6 +757,7 @@
                     <div class="footer-col">
                         <h4>Resources</h4>
                         <a href="https://github.com/amateurmenace" target="_blank">GitHub</a>
+                        <a href="https://drive.google.com/file/d/1YM9YDHAaf03Bp1IK2b6Dfzun6pg0GjDR/view?usp=sharing" target="_blank" rel="noopener">One-Pager (PDF)</a>
                         <a href="terms.html">Terms & License</a>
                     </div>
                     <div class="footer-col">
@@ -763,7 +771,7 @@
                     
                     
                     <div style="font-size: 0.9rem; color: #64748b;">
-                        A community AI app from <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Brookline Interactive Group</a> in partnership with <a href="https://neighborhoodai.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Neighborhood AI</a>.
+                        a <a href="https://weirdmachine.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">weird machine</a> project in collaboration with <a href="https://brooklineinteractive.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">brookline interactive group</a> and <a href="https://neighborhoodai.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">neighborhood ai</a>.
                     </div>
                     <div style="font-size: 0.9rem; color: #64748b;">
                         Designed and developed by <a href="https://weirdmachine.org" target="_blank" style="color:var(--primary-green); text-decoration:underline;">Stephen Walter</a> + AI.
@@ -1253,8 +1261,8 @@ Rules:
             const gridCont = document.getElementById('project-container');
             const featCont = document.getElementById('featured-spotlight');
             
-            // HOTFIX: Manually mark the specific agent as featured 
-            const fItem = projectsData.find(p => p.id === 'civic-agent');
+            // HOTFIX: Manually mark the specific project as featured
+            const fItem = projectsData.find(p => p.id === 'captioner');
             if(fItem) fItem.featured = true;
 
             gridCont.innerHTML = '';
@@ -1276,7 +1284,7 @@ Rules:
                                         <i data-lucide="monitor-play" width="14"></i> Live Demo
                                     </div>
                                     <div class="iframe-wrapper">
-                                        <iframe src="${featured.links.open}" class="featured-app-frame" title="Featured App"></iframe>
+                                        <iframe src="${featured.links.open}" class="featured-app-frame" title="Featured App" allow="microphone; camera; clipboard-write"></iframe>
                                         <div class="scroll-indicator">
                                             <i data-lucide="arrow-down" width="20"></i>
                                         </div>

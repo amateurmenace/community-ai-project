@@ -11,6 +11,46 @@
 
 const projectsData = [
     {
+        id: "control-z",
+        category: "creative",
+        badge: "Free Toolkit",
+        icon: "clapperboard",
+        title: "control-z",
+        description: "Free, open-source cleaning, prepping, and finishing tools for the free version of DaVinci Resolve — a whole finishing pipeline (noise reduction, contrast, resampling, and more), not a plugin pile. Built for the community media centers, journalists, filmmakers, and artists the market skips. Start with Hush, stay for the pipeline.",
+        techStack: ["OpenFX", "DaVinci Resolve", "Open Source"],
+        links: { open: "https://control-z.org" }
+    },
+    {
+        id: "driftwood",
+        category: "creative",
+        badge: "Beta Board",
+        icon: "waves",
+        title: "Driftwood",
+        description: "Software drifts — every time you ship, something works loose and floats downstream. Driftwood is a small, self-contained Kanban board for running a beta without losing the plot: catch the bugs, feedback, and loose ends before they drift away.",
+        techStack: ["Open Source", "Kanban", "Self-Contained"],
+        links: { open: "https://cmd-z.com/home" }
+    },
+    {
+        id: "command-z",
+        category: "creative",
+        badge: "Undo Button",
+        icon: "undo-2",
+        title: "Command-Z",
+        description: "Built on a simple idea: the world needs an undo button. An open-source family of free civic and creative tools that let communities reverse extractive defaults and take back the technology they rely on.",
+        techStack: ["Open Source", "Civic Tech", "Undo"],
+        links: { open: "https://command-z.org" }
+    },
+    {
+        id: "hush-speak",
+        category: "creative",
+        badge: "Open Source",
+        icon: "audio-waveform",
+        title: "Hush / Speak",
+        description: "An attempt at the world's best free video noise reducer — open-source denoising (Hush) and film emulation (Speak) for the free edition of DaVinci Resolve, so paywalls stop deciding who gets to make great-looking work. (<a href='https://amateurmenace.github.io/Hush-OpenNR/whitepaper.html' target='_blank' rel='noopener' style='color:var(--primary-green); font-weight:700; text-decoration:underline;'>read the design study</a>)",
+        techStack: ["OpenFX", "DaVinci Resolve", "Denoising"],
+        links: { open: "https://amateurmenace.github.io/Hush-OpenNR/" }
+    },
+    {
         id: "neighborhood-ai",
         category: "agents",
         badge: ["Local LLM", " Newest!"],
@@ -35,7 +75,6 @@ const projectsData = [
         id: "civic-agent",
         category: "agents",
         badge: "Beta",
-        featured: true,
         icon: "bot-message-square",
         title: "Commit: a localized AI Agent for cities + towns",
         description: "An experimental agental AI chatbot and get-things-done tool that helps you take real-world actions in your community.",
@@ -56,6 +95,7 @@ const projectsData = [
         id: "captioner",
         category: "accessibility",
         badge: "Web Tool",
+        featured: true,
         icon: "subtitles",
         title: "Community Captioner",
         description: "Free browser-based tool to generate real-time open captions for OBS live streams without expensive hardware.",
