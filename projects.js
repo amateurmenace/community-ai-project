@@ -31,14 +31,14 @@ const projectsData = [
         links: { open: "https://cmd-z.com/home" }
     },
     {
-        id: "command-z",
-        category: "creative",
-        badge: "Undo Button",
-        icon: "undo-2",
-        title: "Command-Z",
-        description: "Built on a simple idea: the world needs an undo button. An open-source family of free civic and creative tools that let communities reverse extractive defaults and take back the technology they rely on.",
-        techStack: ["Open Source", "Civic Tech", "Undo"],
-        links: { open: "https://command-z.org" }
+        id: "public-record-studio",
+        category: "meetings",
+        badge: "DIY Newsroom",
+        icon: "newspaper",
+        title: "Public Record Studio",
+        description: "Gives residents the ability to create their own newspaper articles and video highlight reels from the data and video of public meetings broadcast on public access TV stations — turning the public record into local news.",
+        techStack: ["Civic Journalism", "Public Access TV", "Video"],
+        links: { open: "https://publicrecord.studio" }
     },
     {
         id: "hush-speak",
