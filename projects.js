@@ -5,7 +5,7 @@
    2. Paste it at the top of the array.
    3. Update the fields.
    
-   Categories: 'meetings', 'docs', 'agents', 'accessibility'
+   Categories: 'meetings', 'docs', 'agents', 'accessibility', 'creative',
    Icons: Use names from lucide.dev (e.g., 'globe', 'zap', 'code')
 */
 
@@ -53,10 +53,10 @@ const projectsData = [
     {
         id: "neighborhood-ai",
         category: "agents",
-        badge: ["Local LLM", " Newest!"],
+        badge: ["Local LLM", "Infrastructure"],
 
         icon: "message-square-share",
-        title: "Neighborhood AI",
+        title: "The Civic AI Engine",
         description: "An app for fine tuning + launching constitutional local AI models for communities.",
         techStack: ["RAG", "LLM", "Vector DB", "Ollama"],
         links: { open: "https://neighborhood-ai.netlify.app" }
